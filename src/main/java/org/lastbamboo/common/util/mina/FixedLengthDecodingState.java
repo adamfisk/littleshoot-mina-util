@@ -41,7 +41,7 @@ public abstract class FixedLengthDecodingState implements DecodingState
      * 
      * @param length The decode length
      */
-    public FixedLengthDecodingState(int length)
+    public FixedLengthDecodingState(final int length)
         {
         this.m_length = length;
         }

@@ -45,4 +45,17 @@ public class MinaUtils
             }
         }
 
+    /**
+     * Copies the specified buffer to a byte array.
+     * 
+     * @param buf The buffer to copy.
+     * @return The byte array.
+     */
+    public static byte[] toByteArray(final ByteBuffer buf)
+        {
+        final byte[] bytes = new byte[buf.capacity()];
+        buf.get(bytes);
+        return bytes;
+        }
+
     }

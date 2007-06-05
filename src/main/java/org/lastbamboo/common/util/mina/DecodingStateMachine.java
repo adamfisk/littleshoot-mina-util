@@ -43,6 +43,10 @@ public abstract class DecodingStateMachine implements DecodingState
     public DecodingState decode(final ByteBuffer in, 
         final ProtocolDecoderOutput out) throws Exception 
         {
+        if (LOG.isDebugEnabled())
+            {
+            LOG.debug("Decoding...");
+            }
         DecodingState state = this.currentState;
         if (state == null)
             {
