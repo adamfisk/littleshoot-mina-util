@@ -58,4 +58,76 @@ public class MinaUtils
         return bytes;
         }
 
+
+    /**
+     * Puts an unsigned byte into the buffer.
+     * 
+     * @param bb The buffer.
+     * @param value The value to insert.
+     */
+    public static void putUnsignedByte(final ByteBuffer bb, final int value)
+        {
+        bb.put((byte) (value & 0xff));
+        }
+
+    /**
+     * Puts an unsigned byte into the buffer.
+     * 
+     * @param bb The buffer.
+     * @param position The index in the buffer to insert the value.
+     * @param value The value to insert.
+     */
+    public static void putUnsignedByte(final ByteBuffer bb, final int position, 
+        final int value)
+        {
+        bb.put(position, (byte) (value & 0xff));
+        }
+
+    /**
+     * Puts an unsigned byte into the buffer.
+     * 
+     * @param bb The buffer.
+     * @param value The value to insert.
+     */
+    public static void putUnsignedShort(final ByteBuffer bb, final int value)
+        {
+        bb.putShort((short) (value & 0xffff));
+        }
+
+    /**
+     * Puts an unsigned byte into the buffer.
+     * 
+     * @param bb The buffer.
+     * @param position The index in the buffer to insert the value.
+     * @param value The value to insert.
+     */
+    public static void putUnsignedShort(final ByteBuffer bb, final int position, 
+        final int value)
+        {
+        bb.putShort(position, (short) (value & 0xffff));
+        }
+
+    /**
+     * Puts an unsigned byte into the buffer.
+     * 
+     * @param bb The buffer.
+     * @param value The value to insert.
+     */
+    public static void putUnsignedInt(final ByteBuffer bb, final long value)
+        {
+        bb.putInt((int) (value & 0xffffffffL));
+        }
+
+    /**
+     * Puts an unsigned byte into the buffer.
+     * 
+     * @param bb The buffer.
+     * @param position The index in the buffer to insert the value.
+     * @param value The value to insert.
+     */
+    public static void putUnsignedInt(final ByteBuffer bb, final int position, 
+        final long value)
+        {
+        bb.putInt(position, (int) (value & 0xffffffffL));
+        }
     }
