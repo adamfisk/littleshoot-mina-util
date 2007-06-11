@@ -30,11 +30,15 @@
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             </dependency>
-            
+
         <dependency>
             <groupId>org.apache.mina</groupId>
             <artifactId>mina-core</artifactId>
             </dependency>
 
+        <dependency>
+            <groupId>org.lastbamboo</groupId>
+            <artifactId>lastbamboo-common-util-common</artifactId>
+            </dependency>
         </dependencies>
     </project>
