@@ -261,6 +261,7 @@ public class MinaUtils
             new ProtocolCodecFilter(codecFactory));
         filterChainBuilder.addLast("threadPool", 
             new ExecutorFilter(Executors.newCachedThreadPool()));
+        acceptor.setDefaultConfig(cfg);
         return acceptor;
         }
     }
