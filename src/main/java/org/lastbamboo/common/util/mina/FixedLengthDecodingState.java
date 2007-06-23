@@ -32,7 +32,7 @@ import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 public abstract class FixedLengthDecodingState implements DecodingState 
     {
     
-    private final int m_length;
+    protected final int m_length;
 
     private ByteBuffer m_buffer;
 

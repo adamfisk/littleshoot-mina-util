@@ -15,9 +15,9 @@ public class StateMachineProtocolDecoder implements ProtocolDecoder
     private final Logger LOG = 
         LoggerFactory.getLogger(StateMachineProtocolDecoder.class);
 
-    private final DecodingStateMachine stateMachine;
+    private final DecodingStateMachine m_stateMachine;
 
-    private DecodingState currentState;
+    private DecodingState m_currentState;
 
     /**
      * Creates a new top-level state machine decoder.
@@ -30,16 +30,16 @@ public class StateMachineProtocolDecoder implements ProtocolDecoder
             {
             throw new NullPointerException("stateMachine");
             }
-        this.stateMachine = stateMachine;
+        this.m_stateMachine = stateMachine;
         }
 
     public void decode(final IoSession session, final ByteBuffer in,
         final ProtocolDecoderOutput out) throws Exception
         {
-        DecodingState state = this.currentState;
+        DecodingState state = this.m_currentState;
         if (state == null)
             {
-            state = stateMachine.init();
+            state = m_stateMachine.init();
             }
 
         try
@@ -84,7 +84,7 @@ public class StateMachineProtocolDecoder implements ProtocolDecoder
             }
         finally
             {
-            this.currentState = state;
+            this.m_currentState = state;
             }
         }
 
