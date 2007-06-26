@@ -126,13 +126,15 @@ public class MinaUtils
         {
         final Collection<byte[]> buffers = new LinkedList<byte[]>();
         final int originalLimit = buffer.limit();
+        final int originalPosition = buffer.position();
         
         int totalSent = 0;
         while ((totalSent + chunkSize) < originalLimit)
             {
             buffer.limit(totalSent + chunkSize);
             
-            // This will just read up to the limit.
+            // This will just read up to the limit and will increment the
+            // position.
             buffers.add(toByteArray(buffer));            
             totalSent += chunkSize;
             }
@@ -140,6 +142,10 @@ public class MinaUtils
         // Send any remaining bytes.
         buffer.limit(originalLimit);
         buffers.add(toByteArray(buffer));
+        
+        // Reset to beginning.
+        buffer.position(originalPosition);
+        buffer.limit(originalLimit);
         return buffers;
         }
 
