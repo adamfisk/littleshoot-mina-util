@@ -21,91 +21,108 @@ import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 
 /**
 * A decoder which writes all read bytes in to a known <code>Bytes</code>
-* context until a <code>CRLF</code> has been encountered
+* context until a <code>CRLF</code> has been encountered.
 */
-public abstract class ConsumeToCrlfDecodingState implements DecodingState {
+public abstract class ConsumeToCrlfDecodingState implements DecodingState 
+    {
 
   /**
-   * Carriage return character
-   */
-  private static final byte CR = 13;
-  
-  /**
-   * Line feed character
-   */
-  private static final byte LF = 10;
-  
-  private boolean lastIsCR;
-  private ByteBuffer buffer;
-  
-  
-  /**
-   * Creates a new instance.
-   */
-  public ConsumeToCrlfDecodingState() {
-  }
-  
-  public DecodingState decode(ByteBuffer in, ProtocolDecoderOutput out) throws Exception {
-    int beginPos = in.position();
-    int limit = in.limit();
-    int terminatorPos = -1;
-    
-    for (int i = beginPos; i < limit; i++) {
-      byte b = in.get(i);
-      if (b == CR) {
-        lastIsCR = true;
-      } else {
-        if (b == LF && lastIsCR) {
-          terminatorPos = i;
-          break;
-        }
-        lastIsCR = false;
-      }
-    }
-    
-    if (terminatorPos >= 0) {
-      ByteBuffer product;
-      
-      int endPos = terminatorPos - 1;
-      
-      if (beginPos < endPos) {
-        in.limit(endPos);
-  
-        if (buffer == null) {
-          product = in.slice();
-        } else {
-          buffer.put(in);
-          product = buffer.flip();
-          buffer = null;
-        }
-        
-        in.limit(limit);
-      } else {
-        // When input contained only CR or LF rather than actual data...
-        if (buffer == null) {
-          product = ByteBuffer.allocate(1);
-          product.limit(0);
-        } else {
-          product = buffer.flip();
-          buffer = null;
-        }
-      }
-      in.position(terminatorPos + 1);
-      return finishDecode(product, out);
-    } else {
-      in.position(beginPos);
-      if (buffer == null) {
-        buffer = ByteBuffer.allocate(in.remaining());
-        buffer.setAutoExpand(true);
-      } 
-      
-      buffer.put(in);
-      if (lastIsCR) {
-        buffer.position(buffer.position() - 1);
-      }
-      return this;
-    }
-  }
+     * Carriage return character
+     */
+    private static final byte CR = 13;
 
-  protected abstract DecodingState finishDecode(ByteBuffer product, ProtocolDecoderOutput out) throws Exception;
-}
+    /**
+     * Line feed character
+     */
+    private static final byte LF = 10;
+
+    private boolean m_lastIsCr;
+
+    private ByteBuffer m_buffer;
+
+    public DecodingState decode(final ByteBuffer in, 
+        final ProtocolDecoderOutput out) throws Exception
+        {
+        int beginPos = in.position();
+        int limit = in.limit();
+        int terminatorPos = -1;
+
+        for (int i = beginPos; i < limit; i++)
+            {
+            byte b = in.get(i);
+            if (b == CR)
+                {
+                m_lastIsCr = true;
+                }
+            else
+                {
+                if (b == LF && m_lastIsCr)
+                    {
+                    terminatorPos = i;
+                    break;
+                    }
+                m_lastIsCr = false;
+                }
+            }
+
+        if (terminatorPos >= 0)
+            {
+            ByteBuffer product;
+
+            int endPos = terminatorPos - 1;
+
+            if (beginPos < endPos)
+                {
+                in.limit(endPos);
+
+                if (m_buffer == null)
+                    {
+                    product = in.slice();
+                    }
+                else
+                    {
+                    m_buffer.put(in);
+                    product = m_buffer.flip();
+                    m_buffer = null;
+                    }
+
+                in.limit(limit);
+                }
+            else
+                {
+                // When input contained only CR or LF rather than actual data...
+                if (m_buffer == null)
+                    {
+                    product = ByteBuffer.allocate(1);
+                    product.limit(0);
+                    }
+                else
+                    {
+                    product = m_buffer.flip();
+                    m_buffer = null;
+                    }
+                }
+            in.position(terminatorPos + 1);
+            return finishDecode(product, out);
+            }
+        else
+            {
+            in.position(beginPos);
+            if (m_buffer == null)
+                {
+                m_buffer = ByteBuffer.allocate(in.remaining());
+                m_buffer.setAutoExpand(true);
+                }
+
+            m_buffer.put(in);
+            if (m_lastIsCr)
+                {
+                m_buffer.position(m_buffer.position() - 1);
+                }
+            return this;
+            }
+        }
+
+    protected abstract DecodingState finishDecode(ByteBuffer product,
+            ProtocolDecoderOutput out) throws Exception;
+    }

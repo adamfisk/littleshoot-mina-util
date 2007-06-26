@@ -30,7 +30,7 @@ import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 public abstract class ConsumeToTerminatorDecodingState implements DecodingState 
     {
     
-    private ByteBuffer buffer;
+    private ByteBuffer m_buffer;
 
     private final byte m_terminator1;
 
@@ -87,15 +87,15 @@ public abstract class ConsumeToTerminatorDecodingState implements DecodingState
                 {
                 in.limit(terminatorPos);
 
-                if (buffer == null)
+                if (m_buffer == null)
                     {
                     product = in.slice();
                     }
                 else
                     {
-                    buffer.put(in);
-                    product = buffer.flip();
-                    buffer = null;
+                    m_buffer.put(in);
+                    product = m_buffer.flip();
+                    m_buffer = null;
                     }
 
                 in.limit(limit);
@@ -104,15 +104,15 @@ public abstract class ConsumeToTerminatorDecodingState implements DecodingState
                 {
                 // When input contained only terminator rather than actual
                 // data...
-                if (buffer == null)
+                if (m_buffer == null)
                     {
                     product = ByteBuffer.allocate(1);
                     product.limit(0);
                     }
                 else
                     {
-                    product = buffer.flip();
-                    buffer = null;
+                    product = m_buffer.flip();
+                    m_buffer = null;
                     }
                 }
             
@@ -121,12 +121,12 @@ public abstract class ConsumeToTerminatorDecodingState implements DecodingState
             }
         else
             {
-            if (buffer == null)
+            if (m_buffer == null)
                 {
-                buffer = ByteBuffer.allocate(in.remaining());
-                buffer.setAutoExpand(true);
+                m_buffer = ByteBuffer.allocate(in.remaining());
+                m_buffer.setAutoExpand(true);
                 }
-            buffer.put(in);
+            m_buffer.put(in);
             return this;
             }
         }
