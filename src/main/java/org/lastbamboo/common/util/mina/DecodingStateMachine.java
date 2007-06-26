@@ -153,5 +153,9 @@ public abstract class DecodingStateMachine implements DecodingState
             " transitioning to state: {}", stateString);
         
         LOG.debug("Remaining bytes: "+in.remaining());
+        if (in.remaining() == 1)
+            {
+            LOG.debug("Remaining byte: '"+in.get()+"'");
+            }
         }
     }

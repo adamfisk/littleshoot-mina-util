@@ -3,6 +3,7 @@ package org.lastbamboo.common.util.mina;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apache.mina.common.DefaultIoFilterChainBuilder;
@@ -46,28 +47,29 @@ public class MinaTcpServer implements MinaServer
         m_port = port;
         final Executor threadPool = Executors.newCachedThreadPool();
         m_acceptor = new SocketAcceptor(
-                Runtime.getRuntime().availableProcessors() + 1, threadPool);
-        final IoServiceConfig acceptorConfig = m_acceptor.getDefaultConfig();
-        acceptorConfig.setThreadModel(ThreadModel.MANUAL);
+            Runtime.getRuntime().availableProcessors() + 1, threadPool);
 
         final SocketAcceptorConfig cfg = new SocketAcceptorConfig();
+        cfg.setThreadModel(ThreadModel.MANUAL);
 
         // Just hoping this method does what it sounds like it does.
         cfg.setDisconnectOnUnbind(true);
 
         // Not sure why we do this, but almost all the MINA examples set 
         // acceptors to reuse the address.
+        cfg.setReuseAddress(true);
         cfg.getSessionConfig().setReuseAddress(true);
-
+        
         m_acceptor.addListener(ioServiceListener);
 
         final DefaultIoFilterChainBuilder filterChainBuilder = 
-        cfg.getFilterChain();
+            cfg.getFilterChain();
         final ProtocolCodecFilter codecFilter = 
             new ProtocolCodecFilter(codecFactory);
         filterChainBuilder.addLast("codec", codecFilter);
-        filterChainBuilder.addLast("threadPool", 
-                new ExecutorFilter(Executors.newCachedThreadPool()));
+        final ExecutorService executor = Executors.newCachedThreadPool();
+        final ExecutorFilter executorFilter = new ExecutorFilter(executor);
+        filterChainBuilder.addLast("threadPool", executorFilter);
         m_acceptor.setDefaultConfig(cfg);
         }
 

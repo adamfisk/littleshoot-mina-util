@@ -1,5 +1,6 @@
 package org.lastbamboo.common.util.mina;
 
+import org.apache.commons.lang.ClassUtils;
 import org.apache.mina.common.ByteBuffer;
 import org.apache.mina.common.IoSession;
 import org.apache.mina.filter.codec.ProtocolDecoder;
@@ -51,19 +52,19 @@ public class StateMachineProtocolDecoder implements ProtocolDecoder
                 // Wait for more data if all data is consumed.
                 if (remaining == 0)
                     {
-                    //LOG.debug("Breaking -- no remaining bytes...");
+                    LOG.debug("Breaking -- no remaining bytes...");
                     break;
                     }
                 
                 DecodingState oldState = state;
                 
-                //LOG.debug("Calling decode on state: {}", 
-                  // ClassUtils.getShortClassName(state.getClass()));
+                LOG.debug("Calling decode on state: {}", 
+                   ClassUtils.getShortClassName(state.getClass()));
                 state = state.decode(in, out);
 
                 if (state == null)
                     {
-                    //LOG.debug("Got null state...returning...");
+                    LOG.debug("Got null state...breaking...");
                     // Finished
                     break;
                     }
@@ -72,7 +73,7 @@ public class StateMachineProtocolDecoder implements ProtocolDecoder
                 // change.
                 if (in.remaining() == remaining && oldState == state)
                     {
-                    //LOG.debug("Nothing consumed...breaking");
+                    LOG.debug("Nothing consumed...breaking");
                     break;
                     }
                 }
@@ -88,12 +89,13 @@ public class StateMachineProtocolDecoder implements ProtocolDecoder
             }
         }
 
-    public void dispose(IoSession session) throws Exception
+    public void dispose(final IoSession session) throws Exception
         {
         }
 
     public void finishDecode(IoSession session, ProtocolDecoderOutput out)
         throws Exception
         {
+        LOG.debug("Finish decode called");
         }
     }
