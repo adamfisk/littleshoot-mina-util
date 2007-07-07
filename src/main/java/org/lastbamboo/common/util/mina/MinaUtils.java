@@ -1,5 +1,6 @@
 package org.lastbamboo.common.util.mina;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
@@ -219,5 +220,26 @@ public class MinaUtils
         final long value)
         {
         bb.putInt(position, (int) (value & 0xffffffffL));
+        }
+
+    /**
+     * Converts the specified {@link String} to a {@link ByteBuffer}.  The
+     * string encoding is assumed to be ASCII.
+     * 
+     * @param str The string to convert.
+     * @return The new {@link ByteBuffer}.
+     */
+    public static ByteBuffer toBuf(final String str)
+        {
+        try
+            {
+            final byte[] bytes = str.getBytes("US-ASCII");
+            return ByteBuffer.wrap(bytes);
+            }
+        catch (final UnsupportedEncodingException e)
+            {
+            LOG.error("Bad encoding?", e);
+            return ByteBuffer.allocate(0);
+            }
         }
     }
