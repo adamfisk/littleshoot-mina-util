@@ -20,7 +20,7 @@ import java.io.UnsupportedEncodingException;
 import org.apache.mina.common.ByteBuffer;
 
 /**
- * Take from AsyncWeb.  Utilies for SIP codec handling.
+ * Taken from AsyncWeb.  Utilies for SIP codec handling.
  */
 public class MinaCodecUtils 
     {

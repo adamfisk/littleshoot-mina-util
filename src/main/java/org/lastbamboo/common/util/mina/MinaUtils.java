@@ -24,7 +24,9 @@ public class MinaUtils
         Charset.forName("US-ASCII").newDecoder();
 
     /**
-     * Useful for debugging.  Turns the given buffer into an ASCII string.
+     * Useful for debugging.  Turns the given buffer into an ASCII string.  
+     * This does not affect the position or the limit of the buffer (it resets
+     * them to their original values when done).
      * 
      * @param buf The buffer to convert to a string.
      * @return The string.
@@ -40,6 +42,27 @@ public class MinaUtils
             buf.position(position);
             buf.limit(limit);
             return bufString;
+            }
+        catch (final CharacterCodingException e)
+            {
+            LOG.error("Could not decode: "+buf, e);
+            return StringUtils.EMPTY;
+            }
+        }
+    
+    /**
+     * Reads an ASCII string from the buffer.  Reads from the buffer's current
+     * position to its limit.
+     * 
+     * @param buf The buffer to read from.
+     * @return The bytes converted to an ASCII string.
+     */
+    public static String getString(final ByteBuffer buf)
+        {
+        DECODER.reset();
+        try
+            {
+            return buf.getString(DECODER);
             }
         catch (final CharacterCodingException e)
             {
