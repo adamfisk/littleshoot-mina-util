@@ -18,7 +18,7 @@ public class StateMachineProtocolDecoder implements ProtocolDecoder
 
     private final DecodingStateMachine m_stateMachine;
 
-    private DecodingState m_currentState;
+    protected DecodingState m_currentState;
 
     /**
      * Creates a new top-level state machine decoder.
@@ -58,8 +58,11 @@ public class StateMachineProtocolDecoder implements ProtocolDecoder
                 
                 DecodingState oldState = state;
                 
-                LOG.debug("Calling decode on state: {}", 
-                   ClassUtils.getShortClassName(state.getClass()));
+                if (LOG.isDebugEnabled())
+                    {
+                    LOG.debug("Calling decode on state: {}", 
+                        ClassUtils.getShortClassName(state.getClass()));
+                    }
                 state = state.decode(in, out);
 
                 if (state == null)
@@ -93,9 +96,10 @@ public class StateMachineProtocolDecoder implements ProtocolDecoder
         {
         }
 
-    public void finishDecode(IoSession session, ProtocolDecoderOutput out)
-        throws Exception
+    public void finishDecode(final IoSession session, 
+        final ProtocolDecoderOutput out) throws Exception
         {
-        LOG.debug("Finish decode called");
+        LOG.debug("Finish decode called in top-level state machine " +
+            "protocol decoder");
         }
     }
