@@ -1,6 +1,5 @@
 package org.lastbamboo.common.util.mina;
 
-import org.apache.commons.lang.ClassUtils;
 import org.apache.mina.common.ByteBuffer;
 import org.apache.mina.common.IoSession;
 import org.apache.mina.filter.codec.ProtocolDecoder;
@@ -9,16 +8,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Top level decoder.
+ * Top level decoder for state machine decoders.
  */
-public class StateMachineProtocolDecoder implements ProtocolDecoder
+public final class StateMachineProtocolDecoder implements ProtocolDecoder
     {
     private final Logger LOG = 
         LoggerFactory.getLogger(StateMachineProtocolDecoder.class);
 
     private final DecodingStateMachine m_stateMachine;
 
-    protected DecodingState m_currentState;
+    private DecodingState m_currentState;
 
     /**
      * Creates a new top-level state machine decoder.
@@ -38,15 +37,14 @@ public class StateMachineProtocolDecoder implements ProtocolDecoder
         final ProtocolDecoderOutput out) throws Exception
         {
         DecodingState state = this.m_currentState;
-        if (state == null)
-            {
-            state = m_stateMachine.init();
-            }
-
         try
             {
-            for (;;)
+            while (in.hasRemaining())
                 {
+                if (state == null)
+                    {
+                    state = m_stateMachine.init();
+                    }
                 int remaining = in.remaining();
 
                 // Wait for more data if all data is consumed.
@@ -61,15 +59,24 @@ public class StateMachineProtocolDecoder implements ProtocolDecoder
                 if (LOG.isDebugEnabled())
                     {
                     LOG.debug("Calling decode on state: {}", 
-                        ClassUtils.getShortClassName(state.getClass()));
+                        state.getClass().getSimpleName());
                     }
                 state = state.decode(in, out);
 
                 if (state == null)
                     {
-                    LOG.debug("Got null state...breaking...");
-                    // Finished
-                    break;
+                    LOG.debug("Got null state...");
+                    if (in.hasRemaining())
+                        {
+                        LOG.debug("State machine ended but hasn't read all " +
+                            "data!!");
+                        continue;
+                        }
+                    else
+                        {
+                        // Wait for more data.
+                        break;
+                        }
                     }
 
                 // Wait for more data if nothing is consumed and state didn't

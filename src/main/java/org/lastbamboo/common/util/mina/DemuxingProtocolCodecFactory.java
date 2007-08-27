@@ -143,7 +143,8 @@ public class DemuxingProtocolCodecFactory implements ProtocolCodecFactory
         private DemuxingProtocolDecoder(
             final List<DemuxableProtocolCodecFactory> factories)
             {
-            this.m_codecFactories = new LinkedList<DemuxableProtocolCodecFactory>();
+            this.m_codecFactories = 
+                new LinkedList<DemuxableProtocolCodecFactory>();
             this.m_codecFactories.addAll(factories);
             }
         

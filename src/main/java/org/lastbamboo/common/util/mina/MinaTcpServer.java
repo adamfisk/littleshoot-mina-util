@@ -7,8 +7,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apache.mina.common.DefaultIoFilterChainBuilder;
+import org.apache.mina.common.ExecutorThreadModel;
 import org.apache.mina.common.IoHandler;
-import org.apache.mina.common.IoServiceConfig;
 import org.apache.mina.common.IoServiceListener;
 import org.apache.mina.common.ThreadModel;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
@@ -30,7 +30,7 @@ public class MinaTcpServer implements MinaServer
     private final SocketAcceptor m_acceptor;
     private final int m_port;
     private final IoHandler m_handler;
-
+    
     /**
      * Creates a new MINA TCP server.
      * 
@@ -43,6 +43,24 @@ public class MinaTcpServer implements MinaServer
         final IoServiceListener ioServiceListener, final IoHandler handler,
         final int port)
         {
+        this(codecFactory, ioServiceListener, handler, port, 
+            "MINA-Server-Thread");
+        }
+
+    /**
+     * Creates a new MINA TCP server.
+     * 
+     * @param codecFactory The codec factory to use with the acceptor.
+     * @param ioServiceListener The listener for IO service events.
+     * @param handler The {@link IoHandler} for processing incoming data.
+     * @param port The port to listen on. 
+     * @param baseThreadName The base name that will be used for threads
+     * processing data arriving on the server.
+     */
+    public MinaTcpServer(final ProtocolCodecFactory codecFactory, 
+        final IoServiceListener ioServiceListener, final IoHandler handler,
+        final int port, final String baseThreadName)
+        {
         m_handler = handler;
         m_port = port;
         final Executor threadPool = Executors.newCachedThreadPool();
@@ -50,13 +68,14 @@ public class MinaTcpServer implements MinaServer
             Runtime.getRuntime().availableProcessors() + 1, threadPool);
 
         final SocketAcceptorConfig cfg = new SocketAcceptorConfig();
-        cfg.setThreadModel(ThreadModel.MANUAL);
+        
+        final ThreadModel threadModel = 
+            ExecutorThreadModel.getInstance(baseThreadName);
+        cfg.setThreadModel(threadModel);
 
         // Just hoping this method does what it sounds like it does.
         cfg.setDisconnectOnUnbind(true);
 
-        // Not sure why we do this, but almost all the MINA examples set 
-        // acceptors to reuse the address.
         cfg.setReuseAddress(true);
         cfg.getSessionConfig().setReuseAddress(true);
         
