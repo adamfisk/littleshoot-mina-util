@@ -1,18 +1,3 @@
-/*
- * Copyright 2006 The asyncWeb Team.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.lastbamboo.common.util.mina;
 
 import org.apache.mina.common.ByteBuffer;
@@ -20,12 +5,12 @@ import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 
 
 /**
- * Consumes until a fixed (ASCII) character is reached.
- * The terminator is skipped.
+ * Consumes until a fixed (ASCII) character is reached.  This also allows
+ * several characters to act as terminators.  In this case, the first 
+ * terminator that is read ends the reading, i.e. it doesn't like for 
+ * multiple terminators stringed together.
  * 
- * @author irvingd
- * @author trustin
- * @version $Rev: 215 $, $Date: 2006-11-27 01:13:35 -0500 (Mon, 27 Nov 2006) $
+ * The terminator is skipped.
  */
 public abstract class ConsumeToTerminatorDecodingState implements DecodingState 
     {
@@ -52,7 +37,8 @@ public abstract class ConsumeToTerminatorDecodingState implements DecodingState
     /**
      * Creates a new instance.
      * 
-     * @param terminator The terminator.
+     * @param terminator1The first terminator.
+     * @param terminator2 The second terminator.
      */
     protected ConsumeToTerminatorDecodingState(final byte terminator1,
         final byte terminator2)
@@ -70,7 +56,7 @@ public abstract class ConsumeToTerminatorDecodingState implements DecodingState
 
         for (int i = beginPos; i < limit; i++)
             {
-            byte b = in.get(i);
+            final byte b = in.get(i);
             if (b == this.m_terminator1 || b == this.m_terminator2)
                 {
                 this.m_foundTerminator = b;
