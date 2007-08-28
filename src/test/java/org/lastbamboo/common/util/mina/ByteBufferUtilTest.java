@@ -9,6 +9,8 @@ import junit.framework.TestCase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.mina.common.ByteBuffer;
+import org.apache.mina.common.SimpleByteBufferAllocator;
+import org.junit.Before;
 import org.lastbamboo.common.util.mina.ByteBufferUtils;
 
 /**
@@ -18,6 +20,16 @@ public final class ByteBufferUtilTest extends TestCase
     {
 
     private static final Log LOG = LogFactory.getLog(ByteBufferUtilTest.class);
+    
+    /**
+     * MINA does some funky things if we don't do this first.
+     */
+    @Before
+    public void setUp()
+        {
+        ByteBuffer.setUseDirectBuffers(false);
+        ByteBuffer.setAllocator(new SimpleByteBufferAllocator());
+        }
     
     /**
      * Tests the utility method for determining the number of remaining bytes 

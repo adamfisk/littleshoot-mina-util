@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.mina.common.ByteBuffer;
+import org.apache.mina.common.SimpleByteBufferAllocator;
 
 /**
  * Utility class for manipulating <code>ByteBuffer</code>s.
@@ -19,6 +20,12 @@ public final class ByteBufferUtils
      */
     private static final Log LOG = LogFactory.getLog(ByteBufferUtils.class);
 
+    static
+        {
+        ByteBuffer.setUseDirectBuffers(false);
+        ByteBuffer.setAllocator(new SimpleByteBufferAllocator());
+        }
+        
     /**
      * Splits the specified <code>ByteBuffer</code> into smaller 
      * <code>ByteBuffer</code>s of the specified size.  The remaining bytes 
@@ -90,9 +97,8 @@ public final class ByteBufferUtils
     public static int remaining(final Collection<ByteBuffer> buffers)
         {
         int remaining = 0;
-        for (final Iterator iter = buffers.iterator(); iter.hasNext();)
+        for (final ByteBuffer buf : buffers)
             {
-            final ByteBuffer buf = (ByteBuffer) iter.next();
             remaining += buf.remaining();
             }
         return remaining;

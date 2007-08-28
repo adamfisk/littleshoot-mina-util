@@ -2,6 +2,8 @@ package org.lastbamboo.common.util.mina;
 
 import org.apache.mina.common.ByteBuffer;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -14,6 +16,8 @@ import org.apache.mina.filter.codec.ProtocolDecoderOutput;
  */
 public abstract class ConsumeToTerminatorDecodingState implements DecodingState 
     {
+    
+    private final Logger m_log = LoggerFactory.getLogger(getClass());
     
     private ByteBuffer m_buffer;
 
@@ -103,6 +107,7 @@ public abstract class ConsumeToTerminatorDecodingState implements DecodingState
                 }
             
             in.position(terminatorPos + 1);
+            //m_log.debug("Read: {}", MinaUtils.toAsciiString(product.duplicate()));
             return finishDecode(this.m_foundTerminator, product, out);
             }
         else
