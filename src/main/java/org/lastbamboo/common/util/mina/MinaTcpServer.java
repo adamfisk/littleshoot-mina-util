@@ -46,6 +46,24 @@ public class MinaTcpServer implements MinaServer
         this(codecFactory, ioServiceListener, handler, port, 
             "MINA-Server-Thread");
         }
+    
+    /**
+     * Creates a new MINA TCP server that binds to an ephemeral port.
+     * 
+     * @param codecFactory The codec factory to use with the acceptor.
+     * @param ioServiceListener The listener for IO service events.
+     * @param handler The {@link IoHandler} for processing incoming data.
+     * @param baseThreadName The base name that will be used for threads
+     * processing data arriving on the server.
+     */
+    public MinaTcpServer(final ProtocolCodecFactory codecFactory, 
+        final IoServiceListener ioServiceListener, final IoHandler handler,
+        final String baseThreadName)
+        {
+        // Passing 0 as the port here tells InetSocketAddress to use an 
+        // ephemeral port.
+        this(codecFactory, ioServiceListener, handler, 0, baseThreadName);
+        }
 
     /**
      * Creates a new MINA TCP server.
