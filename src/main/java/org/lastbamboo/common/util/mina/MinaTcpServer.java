@@ -16,6 +16,7 @@ import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.executor.ExecutorFilter;
 import org.apache.mina.transport.socket.nio.SocketAcceptor;
 import org.apache.mina.transport.socket.nio.SocketAcceptorConfig;
+import org.lastbamboo.common.util.NetworkUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -112,10 +113,11 @@ public class MinaTcpServer implements MinaServer
 
     public void start()
         {
-        final InetSocketAddress address = new InetSocketAddress(this.m_port);
-
         try
             {
+            final InetSocketAddress address = 
+                new InetSocketAddress(NetworkUtils.getLocalHost(), this.m_port);
+
             m_acceptor.bind(address, m_handler);
             }
         catch (final IOException e)
