@@ -7,10 +7,12 @@ import org.apache.mina.filter.codec.ProtocolEncoder;
 
 /**
  * {@link ProtocolCodecFactory} for protocols that can be demultiplexed.
+ * 
+ * @param <T>
+ *      The type that the created encoders are designed to encode.
  */
-public interface DemuxableProtocolCodecFactory
+public interface DemuxableProtocolCodecFactory<T>
     {
-    
     /**
      * Creates a new encoder.
      * 
@@ -32,7 +34,7 @@ public interface DemuxableProtocolCodecFactory
      * 
      * @return The {@link Class} this factory is designed to encode.
      */
-    Class getClassToEncode();
+    Class<T> getClassToEncode();
 
     /**
      * Determines whether or not this codec factory is capable of decoding
