@@ -31,7 +31,7 @@ public class DemuxingStateMachineProtocolDecoder
         {
         if (stateMachine == null)
             {
-            throw new NullPointerException("stateMachine");
+            throw new NullPointerException("null state machine");
             }
         this.m_stateMachine = stateMachine;
         }
@@ -39,6 +39,7 @@ public class DemuxingStateMachineProtocolDecoder
     public void decode(final IoSession session, final ByteBuffer in,
         final ProtocolDecoderOutput out) throws Exception
         {
+        //LOG.debug("Decoding: ", MinaUtils.toAsciiString(in));
         DecodingState state = this.m_currentState;
         if (state == null)
             {

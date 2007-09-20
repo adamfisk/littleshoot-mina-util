@@ -90,8 +90,12 @@ public class DemuxingProtocolCodecFactory implements ProtocolCodecFactory
             // This only currently works for messages that have an interface
             // two levels up, such as messages with a parent abstract class
             // that implements an interface -- the way we typically do things.
-            final Class[] interfaces = 
-                message.getClass().getSuperclass().getInterfaces();
+            final Class superClass = message.getClass().getSuperclass();
+            Class[] interfaces = superClass.getInterfaces();
+            if (interfaces.length == 0)
+                {
+                interfaces = superClass.getSuperclass().getInterfaces();
+                }
             
             if (interfaces.length == 0)
                 {

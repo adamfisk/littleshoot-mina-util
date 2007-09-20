@@ -38,15 +38,17 @@ public class MinaUtils
         final int limit = buf.limit();
         try
             {
-            final String bufString = buf.getString(DECODER);
-            buf.position(position);
-            buf.limit(limit);
-            return bufString;
+            return buf.getString(DECODER);
             }
         catch (final CharacterCodingException e)
             {
             LOG.error("Could not decode: "+buf, e);
             return StringUtils.EMPTY;
+            }
+        finally
+            {
+            buf.position(position);
+            buf.limit(limit);
             }
         }
     
@@ -151,25 +153,29 @@ public class MinaUtils
         final Collection<byte[]> buffers = new LinkedList<byte[]>();
         final int originalLimit = buffer.limit();
         final int originalPosition = buffer.position();
-        
-        int totalSent = 0;
-        while ((totalSent + chunkSize) < originalLimit)
+        try
             {
-            buffer.limit(totalSent + chunkSize);
+            int totalSent = 0;
+            while ((totalSent + chunkSize) < originalLimit)
+                {
+                buffer.limit(totalSent + chunkSize);
+                
+                // This will just read up to the limit and will increment the
+                // position.
+                buffers.add(toByteArray(buffer));            
+                totalSent += chunkSize;
+                }
             
-            // This will just read up to the limit and will increment the
-            // position.
-            buffers.add(toByteArray(buffer));            
-            totalSent += chunkSize;
+            // Send any remaining bytes.
+            buffer.limit(originalLimit);
+            buffers.add(toByteArray(buffer));
             }
-        
-        // Send any remaining bytes.
-        buffer.limit(originalLimit);
-        buffers.add(toByteArray(buffer));
-        
-        // Reset to beginning.
-        buffer.position(originalPosition);
-        buffer.limit(originalLimit);
+        finally
+            {
+            // Reset to beginning.
+            buffer.position(originalPosition);
+            buffer.limit(originalLimit);
+            }
         return buffers;
         }
 

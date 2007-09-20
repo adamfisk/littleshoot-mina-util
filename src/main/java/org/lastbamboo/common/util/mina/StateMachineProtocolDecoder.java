@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Top level decoder for state machine decoders.
  */
-public final class StateMachineProtocolDecoder implements ProtocolDecoder
+public class StateMachineProtocolDecoder implements ProtocolDecoder
     {
     private final Logger LOG = 
         LoggerFactory.getLogger(StateMachineProtocolDecoder.class);

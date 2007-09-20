@@ -1,7 +1,6 @@
 package org.lastbamboo.common.util.mina;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.apache.commons.logging.Log;
@@ -85,9 +84,8 @@ public final class ByteBufferUtils
     public static ByteBuffer combine(final Collection<ByteBuffer> buffers)
         {
         final ByteBuffer buf = ByteBuffer.allocate(remaining(buffers));
-        for (final Iterator iter = buffers.iterator(); iter.hasNext();)
+        for (final ByteBuffer curBuf : buffers)
             {
-            final ByteBuffer curBuf = (ByteBuffer) iter.next();
             buf.put(curBuf);
             }
         buf.flip();
