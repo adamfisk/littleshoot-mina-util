@@ -7,15 +7,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * {@link IoHandler} that allows STUN to be demultiplexed with other protocols. 
+ * {@link IoHandler} that allows STUN to be demultiplexed with other protocols.
+ *  
+ * @param <T> The type of the message {@link Class} for the first protocol.
+ * @param <Z> The type of the message {@link Class} for the second protocol.
  */
-public class DemuxingIoHandler implements IoHandler
+public class DemuxingIoHandler<T, Z> implements IoHandler
     {
 
     private final Logger m_log = LoggerFactory.getLogger(getClass());
     
-    private final Class m_class1;
-    private final Class m_class2;
+    private final Class<T> m_class1;
+    private final Class<Z> m_class2;
     private final IoHandler m_ioHandler1;
     private final IoHandler m_ioHandler2;
 
@@ -28,16 +31,24 @@ public class DemuxingIoHandler implements IoHandler
      * @param class2 The message class for the second protocol.
      * @param ioHandler2 The {@link IoHandler} for the second protocol.
      */
-    public DemuxingIoHandler(final Class class1, final IoHandler ioHandler1,
-        final Class class2, final IoHandler ioHandler2)
+    public DemuxingIoHandler(final Class<T> class1, final IoHandler ioHandler1,
+        final Class<Z> class2, final IoHandler ioHandler2)
         {
+        if (class1 == null)
+            {
+            throw new NullPointerException("Null first class");
+            }
+        if (class2 == null)
+            {
+            throw new NullPointerException("Null second class");
+            }
         if (ioHandler1 == null)
             {
-            throw new NullPointerException("Null auxillary handler");
+            throw new NullPointerException("Null first handler");
             }
         if (ioHandler2 == null)
             {
-            throw new NullPointerException("Null STUN handler");
+            throw new NullPointerException("Null second handler");
             }
         m_class1 = class1;
         m_class2 = class2;
