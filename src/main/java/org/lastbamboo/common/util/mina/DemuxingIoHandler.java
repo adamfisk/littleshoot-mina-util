@@ -7,7 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * {@link IoHandler} that allows STUN to be demultiplexed with other protocols.
+ * {@link IoHandler} that allows multiple protocols to run over the same 
+ * {@link IoSession}.
  *  
  * @param <T> The type of the message {@link Class} for the first protocol.
  * @param <Z> The type of the message {@link Class} for the second protocol.
@@ -122,7 +123,7 @@ public class DemuxingIoHandler<T, Z> implements IoHandler
         this.m_ioHandler2.sessionIdle(session, status);
         }
 
-    public void sessionOpened(IoSession session) throws Exception
+    public void sessionOpened(final IoSession session) throws Exception
         {
         this.m_ioHandler1.sessionOpened(session);
         this.m_ioHandler2.sessionOpened(session);
