@@ -26,10 +26,9 @@ import org.slf4j.LoggerFactory;
 public class MinaTcpServer implements MinaServer
     {
     
-    private final Logger LOG = LoggerFactory.getLogger(getClass());
+    private final Logger m_log = LoggerFactory.getLogger(getClass());
     
     private final SocketAcceptor m_acceptor;
-    private final int m_port;
     private final IoHandler m_handler;
     
     /**
@@ -38,18 +37,15 @@ public class MinaTcpServer implements MinaServer
      * @param codecFactory The codec factory to use with the acceptor.
      * @param ioServiceListener The listener for IO service events.
      * @param handler The {@link IoHandler} for processing incoming data.
-     * @param port The port to listen on. 
      */
     public MinaTcpServer(final ProtocolCodecFactory codecFactory, 
-        final IoServiceListener ioServiceListener, final IoHandler handler,
-        final int port)
+        final IoServiceListener ioServiceListener, final IoHandler handler)
         {
-        this(codecFactory, ioServiceListener, handler, port, 
-            "MINA-Server-Thread");
+        this(codecFactory, ioServiceListener, handler, "MINA-Server-Thread");
         }
-    
+
     /**
-     * Creates a new MINA TCP server that binds to an ephemeral port.
+     * Creates a new MINA TCP server.
      * 
      * @param codecFactory The codec factory to use with the acceptor.
      * @param ioServiceListener The listener for IO service events.
@@ -61,27 +57,11 @@ public class MinaTcpServer implements MinaServer
         final IoServiceListener ioServiceListener, final IoHandler handler,
         final String baseThreadName)
         {
-        // Passing 0 as the port here tells InetSocketAddress to use an 
-        // ephemeral port.
-        this(codecFactory, ioServiceListener, handler, 0, baseThreadName);
-        }
-
-    /**
-     * Creates a new MINA TCP server.
-     * 
-     * @param codecFactory The codec factory to use with the acceptor.
-     * @param ioServiceListener The listener for IO service events.
-     * @param handler The {@link IoHandler} for processing incoming data.
-     * @param port The port to listen on. 
-     * @param baseThreadName The base name that will be used for threads
-     * processing data arriving on the server.
-     */
-    public MinaTcpServer(final ProtocolCodecFactory codecFactory, 
-        final IoServiceListener ioServiceListener, final IoHandler handler,
-        final int port, final String baseThreadName)
-        {
+        if (ioServiceListener == null)
+            {
+            throw new NullPointerException("Null listener");
+            }
         m_handler = handler;
-        m_port = port;
         final Executor threadPool = Executors.newCachedThreadPool();
         m_acceptor = new SocketAcceptor(
             Runtime.getRuntime().availableProcessors() + 1, threadPool);
@@ -98,6 +78,7 @@ public class MinaTcpServer implements MinaServer
         cfg.setReuseAddress(true);
         cfg.getSessionConfig().setReuseAddress(true);
         
+        
         m_acceptor.addListener(ioServiceListener);
 
         final DefaultIoFilterChainBuilder filterChainBuilder = 
@@ -111,24 +92,33 @@ public class MinaTcpServer implements MinaServer
         m_acceptor.setDefaultConfig(cfg);
         }
 
-    public void start()
+    public void start(final int port)
         {
         try
             {
             final InetSocketAddress address = 
-                new InetSocketAddress(NetworkUtils.getLocalHost(), this.m_port);
+                new InetSocketAddress(NetworkUtils.getLocalHost(), port);
 
             m_acceptor.bind(address, m_handler);
             }
         catch (final IOException e)
             {
-            LOG.error("Could not bind!!", e);
+            m_log.error("Could not bind!!", e);
             }
         }
 
     public void stop()
         {
         this.m_acceptor.unbindAll();
+        }
+
+    public void addIoServiceListener(final IoServiceListener serviceListener)
+        {
+        if (serviceListener == null)
+            {
+            throw new NullPointerException("Null listener");
+            }
+        this.m_acceptor.addListener(serviceListener);
         }
 
     }

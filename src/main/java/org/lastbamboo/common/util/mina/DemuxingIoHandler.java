@@ -60,7 +60,6 @@ public class DemuxingIoHandler<T, Z> implements IoHandler
     public void exceptionCaught(final IoSession session, final Throwable cause)
         throws Exception
         {
-        m_log.warn("Exception caught", cause);
         this.m_ioHandler1.exceptionCaught(session, cause);
         this.m_ioHandler2.exceptionCaught(session, cause);
         }
@@ -100,6 +99,7 @@ public class DemuxingIoHandler<T, Z> implements IoHandler
         else
             {
             m_log.warn("Could not find IoHandler for message: {}", message);
+            m_log.warn("Existing classes: " +m_class1+" and "+m_class2);
             return null;
             }
         }

@@ -141,7 +141,7 @@ public class DemuxingProtocolCodecFactory implements ProtocolCodecFactory
         implements ProtocolDecoder
         {
         private final Logger m_decoderLog = LoggerFactory.getLogger(getClass());
-        private DemuxableProtocolDecoder m_currentDecoder;
+        private volatile DemuxableProtocolDecoder m_currentDecoder;
         private final List<DemuxableProtocolCodecFactory> m_codecFactories;
 
         private DemuxingProtocolDecoder(
@@ -176,9 +176,10 @@ public class DemuxingProtocolCodecFactory implements ProtocolCodecFactory
             {
             int limit = in.limit();
             int pos = in.position();
-            for (final DemuxableProtocolCodecFactory decoderFactory : this.m_codecFactories)
+            try
                 {
-                try
+                for (final DemuxableProtocolCodecFactory decoderFactory : 
+                    this.m_codecFactories)
                     {
                     if (decoderFactory.canDecode(in))
                         {
@@ -187,11 +188,11 @@ public class DemuxingProtocolCodecFactory implements ProtocolCodecFactory
                         return decoderFactory.newDecoder();
                         }
                     }
-                finally
-                    {
-                    in.position(pos);
-                    in.limit(limit);
-                    }
+                }
+            finally
+                {
+                in.position(pos);
+                in.limit(limit);
                 }
             m_decoderLog.warn("Did not understand buffer: {}", 
                 MinaUtils.toAsciiString(in));
