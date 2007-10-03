@@ -2,6 +2,7 @@ package org.lastbamboo.common.util.mina;
 
 import org.apache.mina.common.IdleStatus;
 import org.apache.mina.common.IoHandler;
+import org.apache.mina.common.IoHandlerAdapter;
 import org.apache.mina.common.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +14,7 @@ import org.slf4j.LoggerFactory;
  * @param <T> The type of the message {@link Class} for the first protocol.
  * @param <Z> The type of the message {@link Class} for the second protocol.
  */
-public class DemuxingIoHandler<T, Z> implements IoHandler
+public class DemuxingIoHandler<T, Z> extends IoHandlerAdapter
     {
 
     private final Logger m_log = LoggerFactory.getLogger(getClass());
@@ -57,13 +58,16 @@ public class DemuxingIoHandler<T, Z> implements IoHandler
         m_ioHandler2 = ioHandler2;
         }
     
+    @Override
     public void exceptionCaught(final IoSession session, final Throwable cause)
         throws Exception
         {
+        //m_log.debug("Caught exception", cause);
         this.m_ioHandler1.exceptionCaught(session, cause);
         this.m_ioHandler2.exceptionCaught(session, cause);
         }
 
+    @Override
     public void messageReceived(final IoSession session, final Object message)
         throws Exception
         {
@@ -75,6 +79,7 @@ public class DemuxingIoHandler<T, Z> implements IoHandler
             }
         }
 
+    @Override
     public void messageSent(final IoSession session, final Object message) 
         throws Exception
         {
@@ -104,18 +109,21 @@ public class DemuxingIoHandler<T, Z> implements IoHandler
             }
         }
 
+    @Override
     public void sessionClosed(final IoSession session) throws Exception
         {
         this.m_ioHandler1.sessionClosed(session);
         this.m_ioHandler2.sessionClosed(session);
         }
 
+    @Override
     public void sessionCreated(final IoSession session) throws Exception
         {
         this.m_ioHandler1.sessionCreated(session);
         this.m_ioHandler2.sessionCreated(session);
         }
 
+    @Override
     public void sessionIdle(final IoSession session, final IdleStatus status)
         throws Exception
         {
@@ -123,6 +131,7 @@ public class DemuxingIoHandler<T, Z> implements IoHandler
         this.m_ioHandler2.sessionIdle(session, status);
         }
 
+    @Override
     public void sessionOpened(final IoSession session) throws Exception
         {
         this.m_ioHandler1.sessionOpened(session);

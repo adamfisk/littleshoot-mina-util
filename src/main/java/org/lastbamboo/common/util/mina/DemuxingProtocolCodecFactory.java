@@ -37,6 +37,14 @@ public class DemuxingProtocolCodecFactory implements ProtocolCodecFactory
         final DemuxableProtocolCodecFactory firstCodecFactory,
         final DemuxableProtocolCodecFactory secondCodecFactory)
         {
+        if (firstCodecFactory == null)
+            {
+            throw new NullPointerException("Null first factory");
+            }
+        if (secondCodecFactory == null)
+            {
+            throw new NullPointerException("Null second factory");
+            }
         m_codecFactories.add(firstCodecFactory);
         m_codecFactories.add(secondCodecFactory);
         }
