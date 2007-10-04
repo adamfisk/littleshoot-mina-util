@@ -45,4 +45,5 @@ public interface DemuxableProtocolCodecFactory<T>
      * otherwise <code>false</code>.
      */
     boolean canDecode(ByteBuffer in);
+    
     }
