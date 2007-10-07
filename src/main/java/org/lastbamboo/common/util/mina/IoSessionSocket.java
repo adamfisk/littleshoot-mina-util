@@ -346,8 +346,7 @@ public final class IoSessionSocket extends Socket
      * {@inheritDoc}
      */
     @Override
-    public synchronized void setSendBufferSize(final int size) 
-        throws SocketException
+    public void setSendBufferSize(final int size) throws SocketException
         {
         throw new NotYetImplementedException ();
         }
@@ -359,17 +358,17 @@ public final class IoSessionSocket extends Socket
     public void setSoLinger(final boolean on, final int linger) 
         throws SocketException
         {
-        throw new NotYetImplementedException ();
+        // Ignored since we don't know how to handle it for now.
         }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public synchronized void setSoTimeout(final int timeout) 
+    public void setSoTimeout(final int timeout) 
         throws SocketException
         {
-        throw new NotYetImplementedException ();
+        // Ignored since we don't know how to handle it for now.
         }
 
     /**
@@ -378,7 +377,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public void setTcpNoDelay(final boolean on) throws SocketException
         {
-        throw new NotYetImplementedException ();
+        // Ignored since we don't know how to handle it for now.
         }
 
     /**
