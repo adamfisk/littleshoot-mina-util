@@ -11,6 +11,7 @@ import java.net.SocketException;
 import java.nio.channels.SocketChannel;
 
 import org.apache.mina.common.IoSession;
+import org.apache.mina.transport.socket.nio.SocketSessionConfig;
 import org.lastbamboo.common.util.NotYetImplementedException;
 
 /**
@@ -23,6 +24,7 @@ public final class IoSessionSocket extends Socket
     private final IoSession m_ioSession;
     private final InputStream m_in;
     private final OutputStream m_out;
+    private final SocketSessionConfig m_socketSessionConfig;
 
     /**
      * Creates a new {@link Socket} subclass that works with MINA sessions.
@@ -37,6 +39,7 @@ public final class IoSessionSocket extends Socket
         this.m_ioSession = ioSession;
         this.m_in = in;
         this.m_out = out;
+        this.m_socketSessionConfig = (SocketSessionConfig)ioSession.getConfig();
         }
 
     /**
@@ -172,10 +175,9 @@ public final class IoSessionSocket extends Socket
      * {@inheritDoc}
      */
     @Override
-    public synchronized int getReceiveBufferSize() 
-        throws SocketException
+    public int getReceiveBufferSize() throws SocketException
         {
-        throw new NotYetImplementedException ();
+        return this.m_socketSessionConfig.getReceiveBufferSize();
         }
 
     /**
@@ -200,9 +202,9 @@ public final class IoSessionSocket extends Socket
      * {@inheritDoc}
      */
     @Override
-    public synchronized int getSendBufferSize() throws SocketException
+    public int getSendBufferSize() throws SocketException
         {
-        throw new NotYetImplementedException ();
+        return this.m_socketSessionConfig.getSendBufferSize();
         }
 
     /**
@@ -211,16 +213,16 @@ public final class IoSessionSocket extends Socket
     @Override
     public int getSoLinger() throws SocketException
         {
-        throw new NotYetImplementedException ();
+        return this.m_socketSessionConfig.getSoLinger();
         }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public synchronized int getSoTimeout() throws SocketException
+    public int getSoTimeout() throws SocketException
         {
-        throw new NotYetImplementedException ();
+        throw new NotYetImplementedException("SO_TIMEOUT not implemented");
         }
 
     /**
