@@ -1,6 +1,7 @@
 package org.lastbamboo.common.util.mina;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -9,6 +10,7 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.apache.mina.common.IoSession;
 import org.apache.mina.transport.socket.nio.SocketConnector;
 import org.junit.Test;
 
@@ -24,9 +26,10 @@ public class SocketIoHandlerTest
         final SocketIoHandler handler = new SocketIoHandler()
             {
             @Override
-            protected void onSocket(final Socket sock)
+            public void sessionOpened(final IoSession session)
                 {
-                ref.set(sock);
+                super.sessionOpened(session);
+                ref.set((Socket) session.getAttribute("SOCKET"));
                 synchronized (ref)
                     {
                     ref.notifyAll();

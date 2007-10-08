@@ -46,7 +46,7 @@ public abstract class SocketIoHandler extends IoHandlerAdapter
      * Implement this method to execute your stream I/O logic; <b>please note
      * that you must forward the process request to other thread or thread pool.</b>
      */
-    protected abstract void onSocket(Socket sock);
+    //protected abstract void onSocket(Socket sock);
 
     /**
      * Returns read timeout in seconds. The default value is <tt>0</tt>
@@ -95,17 +95,18 @@ public abstract class SocketIoHandler extends IoHandlerAdapter
 
         // Create streams
         final InputStream in = new IoSessionInputStream();
-        final OutputStream out = this.m_osFactory.newStream(session);//new IoSessionOutputStream(session);
+        final OutputStream out = this.m_osFactory.newStream(session);
         session.setAttribute(KEY_IN, in);
         session.setAttribute(KEY_OUT, out);
         final Socket ioSocket = new IoSessionSocket(session, in, out);
-        onSocket(ioSocket);
+        session.setAttribute("SOCKET", ioSocket);
+        //onSocket(ioSocket);
         }
 
     /**
      * Closes streams
      */
-    public void sessionClosed(IoSession session) throws Exception
+    public void sessionClosed(final IoSession session) throws Exception
         {
         final InputStream in = (InputStream) session.getAttribute(KEY_IN);
         final OutputStream out = (OutputStream) session.getAttribute(KEY_OUT);
@@ -122,10 +123,10 @@ public abstract class SocketIoHandler extends IoHandlerAdapter
     /**
      * Forwards read data to input stream.
      */
-    public void messageReceived(IoSession session, Object buf)
+    public void messageReceived(final IoSession session, final Object buf)
         {
-        final IoSessionInputStream in = (IoSessionInputStream) session
-                .getAttribute(KEY_IN);
+        final IoSessionInputStream in = 
+            (IoSessionInputStream) session.getAttribute(KEY_IN);
         in.write((ByteBuffer) buf);
         }
 
