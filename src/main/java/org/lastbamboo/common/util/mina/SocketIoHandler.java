@@ -43,12 +43,6 @@ public abstract class SocketIoHandler extends IoHandlerAdapter
         }
 
     /**
-     * Implement this method to execute your stream I/O logic; <b>please note
-     * that you must forward the process request to other thread or thread pool.</b>
-     */
-    //protected abstract void onSocket(Socket sock);
-
-    /**
      * Returns read timeout in seconds. The default value is <tt>0</tt>
      * (disabled).
      */

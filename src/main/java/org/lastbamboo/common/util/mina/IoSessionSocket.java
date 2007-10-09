@@ -40,6 +40,7 @@ public final class IoSessionSocket extends Socket
         this.m_in = in;
         this.m_out = out;
         this.m_socketSessionConfig = (SocketSessionConfig)ioSession.getConfig();
+        this.m_socketSessionConfig.setKeepAlive(true);
         }
 
     /**
@@ -57,7 +58,7 @@ public final class IoSessionSocket extends Socket
      * {@inheritDoc}
      */
     @Override
-    public synchronized void close() throws IOException
+    public void close() throws IOException
         {
         this.m_ioSession.close();
         }
