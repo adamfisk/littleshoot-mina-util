@@ -43,7 +43,7 @@ public abstract class AbstractIoSessionOutputStream<T> extends OutputStream
             }
         }
 
-    protected void checkClosed() throws IOException
+    private void checkClosed() throws IOException
         {
         if (!m_ioSession.isConnected())
             {
@@ -57,11 +57,13 @@ public abstract class AbstractIoSessionOutputStream<T> extends OutputStream
         checkClosed();
         m_lastWriteFuture = m_ioSession.write(message);
         m_lastWriteFuture.join(m_ioSession.getWriteTimeoutInMillis());
+        m_log.debug("Finshing writing message...");
         }
 
     @Override
     public synchronized void flush() throws IOException
         {
+        m_log.debug("Flushing IoSession output stream...");
         if (m_lastWriteFuture == null)
             {
             return;

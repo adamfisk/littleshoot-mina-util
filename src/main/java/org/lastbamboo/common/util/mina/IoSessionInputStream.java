@@ -38,34 +38,41 @@ import org.slf4j.LoggerFactory;
 public class IoSessionInputStream extends InputStream
     {
     private final Logger m_log = LoggerFactory.getLogger(getClass());
-    private final Object mutex = new Object();
+    private final Object m_mutex = new Object();
 
-    private final ByteBuffer buf;
+    private final ByteBuffer m_buf;
 
-    private volatile boolean closed;
+    private volatile boolean m_closed;
 
-    private volatile boolean released;
+    private volatile boolean m_released;
 
-    private IOException exception;
+    private IOException m_exception;
+    private final IoSession m_ioSession;
+    private final int m_readTimeout;
+    private volatile int m_rawBytesReceived = 0;
+    private volatile int m_totalReadBytes;
 
-    public IoSessionInputStream()
+    public IoSessionInputStream(final IoSession ioSession, 
+        final int readTimeout)
         {
-        buf = ByteBuffer.allocate(16);
-        buf.setAutoExpand(true);
-        buf.limit(0);
+        m_ioSession = ioSession;
+        m_readTimeout = readTimeout;
+        m_buf = ByteBuffer.allocate(16);
+        m_buf.setAutoExpand(true);
+        m_buf.limit(0);
         }
 
     public int available()
         {
-        if (released)
+        if (m_released)
             {
             return 0;
             }
         else
             {
-            synchronized (mutex)
+            synchronized (m_mutex)
                 {
-                return buf.remaining();
+                return m_buf.remaining();
                 }
             }
         }
@@ -73,50 +80,51 @@ public class IoSessionInputStream extends InputStream
     public void close()
         {
         m_log.debug("Closing input stream...");
-        if (closed)
+        if (m_closed)
             {
             return;
             }
 
-        synchronized (mutex)
+        synchronized (m_mutex)
             {
-            closed = true;
+            m_closed = true;
             releaseBuffer();
 
-            mutex.notifyAll();
+            m_mutex.notifyAll();
             }
         }
 
     public int read() throws IOException
         {
-        synchronized (mutex)
+        synchronized (m_mutex)
             {
             if (!waitForData())
                 {
                 return -1;
                 }
 
-            return buf.get() & 0xff;
+            return m_buf.get() & 0xff;
             }
         }
 
     public int read(final byte[] b, final int off, final int len) 
         throws IOException
         {
+        //Thread.dumpStack();
         m_log.debug("Reading data...");
-        synchronized (mutex)
+        synchronized (m_mutex)
             {
             if (!waitForData())
                 {
                 m_log.debug("Not waiting for data...");
                 return -1;
                 }
-
+            m_log.debug("Continuing with read...");
             int readBytes;
 
-            if (len > buf.remaining())
+            if (len > m_buf.remaining())
                 {
-                readBytes = buf.remaining();
+                readBytes = m_buf.remaining();
                 }
             else
                 {
@@ -124,28 +132,30 @@ public class IoSessionInputStream extends InputStream
                 }
 
             m_log.debug("Copying bytes...");
-            buf.get(b, off, readBytes);
+            m_buf.get(b, off, readBytes);
 
+            m_totalReadBytes += readBytes;
+            m_log.debug("Total read bytes: {}", m_totalReadBytes);
             return readBytes;
             }
         }
 
     private boolean waitForData() throws IOException
         {
-        if (released)
+        if (m_released)
             {
             m_log.debug("Released...");
             return false;
             }
 
-        synchronized (mutex)
+        synchronized (m_mutex)
             {
-            while (!released && buf.remaining() == 0 && exception == null)
+            while (!m_released && m_buf.remaining() == 0 && m_exception == null)
                 {
                 try
                     {
-                    m_log.debug("Waiting for data...");
-                    mutex.wait();
+                    m_log.debug("Waiting for data for: "+this.m_readTimeout);
+                    m_mutex.wait(this.m_readTimeout);
                     }
                 catch (final InterruptedException e)
                     {
@@ -157,13 +167,13 @@ public class IoSessionInputStream extends InputStream
                 }
             }
 
-        if (exception != null)
+        if (m_exception != null)
             {
             releaseBuffer();
-            throw exception;
+            throw m_exception;
             }
 
-        if (closed && buf.remaining() == 0)
+        if (m_closed && m_buf.remaining() == 0)
             {
             releaseBuffer();
 
@@ -175,53 +185,56 @@ public class IoSessionInputStream extends InputStream
 
     private void releaseBuffer()
         {
-        if (released)
+        if (m_released)
             {
             return;
             }
 
-        released = true;
-        buf.release();
+        m_released = true;
+        m_buf.release();
         }
 
     public void write(final ByteBuffer src)
         {
         m_log.debug("Writing data to input stream...");
-        synchronized (mutex)
+        m_rawBytesReceived += src.remaining();
+        m_log.debug("Received raw bytes: {}", m_rawBytesReceived);
+        synchronized (m_mutex)
             {
-            if (closed)
+            if (m_closed)
                 {
                 m_log.debug("InputStream closed...");
                 return;
                 }
 
-            if (buf.hasRemaining())
+            if (m_buf.hasRemaining())
                 {
                 m_log.debug("Copying buffer data...");
-                this.buf.compact();
-                this.buf.put(src);
-                this.buf.flip();
+                this.m_buf.compact();
+                this.m_buf.put(src);
+                this.m_buf.flip();
+                m_mutex.notifyAll();
                 }
             else
                 {
                 m_log.debug("Nothing remaining in buffer...");
-                this.buf.clear();
-                this.buf.put(src);
-                this.buf.flip();
-                mutex.notifyAll();
+                this.m_buf.clear();
+                this.m_buf.put(src);
+                this.m_buf.flip();
+                m_mutex.notifyAll();
                 }
             }
         }
 
     public void throwException(IOException e)
         {
-        synchronized (mutex)
+        synchronized (m_mutex)
             {
-            if (exception == null)
+            if (m_exception == null)
                 {
-                exception = e;
+                m_exception = e;
 
-                mutex.notifyAll();
+                m_mutex.notifyAll();
                 }
             }
         }

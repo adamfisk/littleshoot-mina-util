@@ -10,23 +10,26 @@ import org.apache.mina.common.ByteBuffer;
 import org.apache.mina.common.IdleStatus;
 import org.apache.mina.common.IoHandlerAdapter;
 import org.apache.mina.common.IoSession;
-import org.apache.mina.util.SessionLog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public abstract class SocketIoHandler extends IoHandlerAdapter
+public class SocketIoHandler extends IoHandlerAdapter
     {
-    private static final String KEY_IN = SocketIoHandler.class.getName()
-            + ".in";
+    
+    private final Logger m_log = LoggerFactory.getLogger(getClass());
+    private static final String KEY_IN = 
+        SocketIoHandler.class.getName()+".in";
 
-    private static final String KEY_OUT = SocketIoHandler.class.getName()
-            + ".out";
+    private static final String KEY_OUT = 
+        SocketIoHandler.class.getName()+ ".out";
 
-    private int readTimeout;
+    private int m_readTimeout;
 
-    private int writeTimeout;
+    private int m_writeTimeout;
 
     private final IoSessionOutputStreamFactory m_osFactory;
 
-    protected SocketIoHandler()
+    public SocketIoHandler()
         {
         m_osFactory = new IoSessionOutputStreamFactory()
             {
@@ -37,7 +40,7 @@ public abstract class SocketIoHandler extends IoHandlerAdapter
             };
         }
     
-    protected SocketIoHandler(final IoSessionOutputStreamFactory osFactory)
+    public SocketIoHandler(final IoSessionOutputStreamFactory osFactory)
         {
         m_osFactory = osFactory;
         }
@@ -48,7 +51,7 @@ public abstract class SocketIoHandler extends IoHandlerAdapter
      */
     public int getReadTimeout()
         {
-        return readTimeout;
+        return m_readTimeout;
         }
 
     /**
@@ -57,7 +60,7 @@ public abstract class SocketIoHandler extends IoHandlerAdapter
      */
     public void setReadTimeout(final int readTimeout)
         {
-        this.readTimeout = readTimeout;
+        this.m_readTimeout = readTimeout;
         }
 
     /**
@@ -66,7 +69,7 @@ public abstract class SocketIoHandler extends IoHandlerAdapter
      */
     public int getWriteTimeout()
         {
-        return writeTimeout;
+        return m_writeTimeout;
         }
 
     /**
@@ -75,7 +78,7 @@ public abstract class SocketIoHandler extends IoHandlerAdapter
      */
     public void setWriteTimeout(int writeTimeout)
         {
-        this.writeTimeout = writeTimeout;
+        this.m_writeTimeout = writeTimeout;
         }
 
     /**
@@ -84,11 +87,11 @@ public abstract class SocketIoHandler extends IoHandlerAdapter
     public void sessionOpened(final IoSession session)
         {
         // Set timeouts
-        session.setWriteTimeout(writeTimeout);
-        session.setIdleTime(IdleStatus.READER_IDLE, readTimeout);
+        session.setWriteTimeout(m_writeTimeout);
+        session.setIdleTime(IdleStatus.READER_IDLE, m_readTimeout);
 
         // Create streams
-        final InputStream in = new IoSessionInputStream();
+        final InputStream in = new IoSessionInputStream(session, m_readTimeout);
         final OutputStream out = this.m_osFactory.newStream(session);
         session.setAttribute(KEY_IN, in);
         session.setAttribute(KEY_OUT, out);
@@ -102,6 +105,7 @@ public abstract class SocketIoHandler extends IoHandlerAdapter
      */
     public void sessionClosed(final IoSession session) throws Exception
         {
+        m_log.debug("Closing streams!!!");
         final InputStream in = (InputStream) session.getAttribute(KEY_IN);
         final OutputStream out = (OutputStream) session.getAttribute(KEY_OUT);
         try
@@ -121,13 +125,14 @@ public abstract class SocketIoHandler extends IoHandlerAdapter
         {
         final IoSessionInputStream in = 
             (IoSessionInputStream) session.getAttribute(KEY_IN);
+        
         in.write((ByteBuffer) buf);
         }
 
     /**
      * Forwards caught exceptions to input stream.
      */
-    public void exceptionCaught(IoSession session, Throwable cause)
+    public void exceptionCaught(final IoSession session, final Throwable cause)
         {
         final IoSessionInputStream in = (IoSessionInputStream) session
                 .getAttribute(KEY_IN);
@@ -148,7 +153,7 @@ public abstract class SocketIoHandler extends IoHandlerAdapter
             }
         else
             {
-            SessionLog.warn(session, "Unexpected exception.", cause);
+            m_log.warn("Unexpected exception.", cause);
             session.close();
             }
         }
@@ -169,7 +174,7 @@ public abstract class SocketIoHandler extends IoHandlerAdapter
         {
         private static final long serialVersionUID = 3976736960742503222L;
 
-        public StreamIoException(IOException cause)
+        private StreamIoException(final IOException cause)
             {
             super(cause);
             }

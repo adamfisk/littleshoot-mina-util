@@ -64,6 +64,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public void close() throws IOException
         {
+        m_log.debug("Closing socket!!!");
         this.m_ioSession.close();
         }
 
@@ -83,7 +84,7 @@ public final class IoSessionSocket extends Socket
     public void connect(final SocketAddress address, final int timeout) 
         throws IOException
         {
-
+        m_log.warn("We should already be connected!!");
         }
 
     /**
