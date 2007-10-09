@@ -50,7 +50,7 @@ public abstract class AbstractIoSessionOutputStream<T> extends OutputStream
         {
         checkClosed();
         m_lastWriteFuture = m_ioSession.write(message);
-        //m_lastWriteFuture.join(session.getWriteTimeoutInMillis());
+        m_lastWriteFuture.join(m_ioSession.getWriteTimeoutInMillis());
         }
 
     @Override
