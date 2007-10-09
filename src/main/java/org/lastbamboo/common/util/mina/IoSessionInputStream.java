@@ -25,6 +25,8 @@ import java.io.InputStream;
 import org.apache.mina.common.ByteBuffer;
 import org.apache.mina.common.IoHandler;
 import org.apache.mina.common.IoSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An {@link InputStream} that buffers data read from
@@ -35,6 +37,7 @@ import org.apache.mina.common.IoSession;
  */
 public class IoSessionInputStream extends InputStream
     {
+    private final Logger m_log = LoggerFactory.getLogger(getClass());
     private final Object mutex = new Object();
 
     private final ByteBuffer buf;
@@ -96,8 +99,10 @@ public class IoSessionInputStream extends InputStream
             }
         }
 
-    public int read(byte[] b, int off, int len) throws IOException
+    public int read(final byte[] b, final int off, final int len) 
+        throws IOException
         {
+        m_log.debug("Reading data...");
         synchronized (mutex)
             {
             if (!waitForData())
@@ -135,9 +140,10 @@ public class IoSessionInputStream extends InputStream
                 {
                 try
                     {
+                    m_log.debug("Waiting for data...");
                     mutex.wait();
                     }
-                catch (InterruptedException e)
+                catch (final InterruptedException e)
                     {
                     IOException ioe = new IOException(
                             "Interrupted while waiting for more data");
@@ -174,8 +180,9 @@ public class IoSessionInputStream extends InputStream
         buf.release();
         }
 
-    public void write(ByteBuffer src)
+    public void write(final ByteBuffer src)
         {
+        m_log.debug("Writing data to input stream...");
         synchronized (mutex)
             {
             if (closed)
