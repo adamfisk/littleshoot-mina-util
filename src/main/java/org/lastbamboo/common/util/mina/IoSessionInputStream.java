@@ -72,6 +72,7 @@ public class IoSessionInputStream extends InputStream
 
     public void close()
         {
+        m_log.debug("Closing input stream...");
         if (closed)
             {
             return;
@@ -107,6 +108,7 @@ public class IoSessionInputStream extends InputStream
             {
             if (!waitForData())
                 {
+                m_log.debug("Not waiting for data...");
                 return -1;
                 }
 
@@ -121,6 +123,7 @@ public class IoSessionInputStream extends InputStream
                 readBytes = len;
                 }
 
+            m_log.debug("Copying bytes...");
             buf.get(b, off, readBytes);
 
             return readBytes;
@@ -131,6 +134,7 @@ public class IoSessionInputStream extends InputStream
         {
         if (released)
             {
+            m_log.debug("Released...");
             return false;
             }
 
@@ -187,17 +191,20 @@ public class IoSessionInputStream extends InputStream
             {
             if (closed)
                 {
+                m_log.debug("InputStream closed...");
                 return;
                 }
 
             if (buf.hasRemaining())
                 {
+                m_log.debug("Copying buffer data...");
                 this.buf.compact();
                 this.buf.put(src);
                 this.buf.flip();
                 }
             else
                 {
+                m_log.debug("Nothing remaining in buffer...");
                 this.buf.clear();
                 this.buf.put(src);
                 this.buf.flip();

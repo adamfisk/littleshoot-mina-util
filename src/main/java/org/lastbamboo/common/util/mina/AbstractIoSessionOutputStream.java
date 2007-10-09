@@ -6,6 +6,8 @@ import java.io.OutputStream;
 import org.apache.mina.common.ByteBuffer;
 import org.apache.mina.common.IoSession;
 import org.apache.mina.common.WriteFuture;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An abstract utility class for creating {@link OutputStream}s from 
@@ -16,6 +18,8 @@ import org.apache.mina.common.WriteFuture;
  */
 public abstract class AbstractIoSessionOutputStream<T> extends OutputStream 
     {
+    private final Logger m_log = LoggerFactory.getLogger(getClass());
+    
     protected final IoSession m_ioSession;
 
     protected WriteFuture m_lastWriteFuture;
@@ -28,6 +32,7 @@ public abstract class AbstractIoSessionOutputStream<T> extends OutputStream
     @Override
     public void close() throws IOException 
         {
+        m_log.debug("Closing output stream...");
         try
             {
             flush();
@@ -48,6 +53,7 @@ public abstract class AbstractIoSessionOutputStream<T> extends OutputStream
 
     protected synchronized void write(final T message) throws IOException
         {
+        m_log.debug("Writing message: {}", message);
         checkClosed();
         m_lastWriteFuture = m_ioSession.write(message);
         m_lastWriteFuture.join(m_ioSession.getWriteTimeoutInMillis());

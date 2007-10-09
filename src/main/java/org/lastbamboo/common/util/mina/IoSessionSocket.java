@@ -13,6 +13,8 @@ import java.nio.channels.SocketChannel;
 import org.apache.mina.common.IoSession;
 import org.apache.mina.transport.socket.nio.SocketSessionConfig;
 import org.lastbamboo.common.util.NotYetImplementedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A socket implementation that wraps a MINA {@link IoSession} in a 
@@ -21,6 +23,7 @@ import org.lastbamboo.common.util.NotYetImplementedException;
 public final class IoSessionSocket extends Socket
     {
     
+    private final Logger m_log = LoggerFactory.getLogger(getClass());
     private final IoSession m_ioSession;
     private final InputStream m_in;
     private final OutputStream m_out;
@@ -49,6 +52,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public void bind(final SocketAddress address) throws IOException
         {
+        m_log.warn("Attempting to bind to local address...");
         // For now, we do not allow binding of the local address.  The ephemeral
         // port will just be chosen.
         throw new NotYetImplementedException ();
@@ -88,6 +92,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public SocketChannel getChannel()
         {
+        m_log.warn("Not implemented!!!");
         throw new NotYetImplementedException ();
         }
 
@@ -106,6 +111,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public InputStream getInputStream() throws IOException
         {
+        m_log.debug("Returning input stream...");
         return this.m_in;
         }
 
@@ -160,6 +166,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public OutputStream getOutputStream() throws IOException
         {
+        m_log.debug("Returning output stream...");
         return this.m_out;
         }
 
@@ -196,7 +203,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public boolean getReuseAddress () throws SocketException
         {
-        throw new NotYetImplementedException ();
+        return this.m_socketSessionConfig.isReuseAddress();
         }
 
     /**
@@ -223,6 +230,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public int getSoTimeout() throws SocketException
         {
+        m_log.warn("Not implemented!!!");
         throw new NotYetImplementedException("SO_TIMEOUT not implemented");
         }
 
@@ -232,7 +240,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public boolean getTcpNoDelay() throws SocketException
         {
-        throw new NotYetImplementedException ();
+        return this.m_socketSessionConfig.isTcpNoDelay();
         }
 
     /**
@@ -241,7 +249,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public int getTrafficClass() throws SocketException
         {
-        throw new NotYetImplementedException ();
+        return this.m_socketSessionConfig.getTrafficClass();
         }
 
     /**
@@ -250,7 +258,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public boolean isBound()
         {
-        throw new NotYetImplementedException ();
+        return true;
         }
 
     /**
@@ -259,7 +267,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public boolean isClosed()
         {
-        throw new NotYetImplementedException ();
+        return !this.m_ioSession.isConnected();
         }
 
     /**
@@ -277,6 +285,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public boolean isInputShutdown()
         {
+        m_log.warn("Not implemented!!!");
         throw new NotYetImplementedException ();
         }
 
@@ -286,6 +295,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public boolean isOutputShutdown()
         {
+        m_log.warn("Not implemented!!!");
         throw new NotYetImplementedException ();
         }
 
@@ -295,7 +305,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public void sendUrgentData(final int data) throws IOException
         {
-        throw new NotYetImplementedException ();
+        this.m_out.write(data);
         }
 
     /**
@@ -304,7 +314,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public void setKeepAlive(final boolean on) throws SocketException
         {
-        throw new NotYetImplementedException ();
+        this.m_socketSessionConfig.setKeepAlive(on);
         }
 
     /**
@@ -313,7 +323,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public void setOOBInline(final boolean on) throws SocketException
         {
-        throw new NotYetImplementedException ();
+        this.m_socketSessionConfig.setOobInline(on);
         }
 
     /**
@@ -323,6 +333,7 @@ public final class IoSessionSocket extends Socket
     public void setPerformancePreferences(final int connectionTime,
         final int latency, final int bandwidth)
         {
+        m_log.warn("Not implemented!!!");
         throw new NotYetImplementedException ();
         }
 
@@ -333,7 +344,7 @@ public final class IoSessionSocket extends Socket
     public synchronized void setReceiveBufferSize(final int size) 
         throws SocketException
         {
-        throw new NotYetImplementedException ();
+        this.m_socketSessionConfig.setReceiveBufferSize(size);
         }
 
     /**
@@ -342,7 +353,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public void setReuseAddress(final boolean on) throws SocketException
         {
-        throw new NotYetImplementedException ();
+        this.m_socketSessionConfig.setReuseAddress(on);
         }
 
     /**
@@ -351,7 +362,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public void setSendBufferSize(final int size) throws SocketException
         {
-        throw new NotYetImplementedException ();
+        this.m_socketSessionConfig.setSendBufferSize(size);
         }
 
     /**
@@ -361,15 +372,14 @@ public final class IoSessionSocket extends Socket
     public void setSoLinger(final boolean on, final int linger) 
         throws SocketException
         {
-        // Ignored since we don't know how to handle it for now.
+        this.m_socketSessionConfig.setSoLinger(linger);
         }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void setSoTimeout(final int timeout) 
-        throws SocketException
+    public void setSoTimeout(final int timeout) throws SocketException
         {
         // Ignored since we don't know how to handle it for now.
         }
@@ -380,7 +390,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public void setTcpNoDelay(final boolean on) throws SocketException
         {
-        // Ignored since we don't know how to handle it for now.
+        this.m_socketSessionConfig.setTcpNoDelay(on);
         }
 
     /**
@@ -389,7 +399,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public void setTrafficClass(final int tc) throws SocketException
         {
-        throw new NotYetImplementedException ();
+        this.m_socketSessionConfig.setTrafficClass(tc);
         }
 
     /**
@@ -398,7 +408,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public void shutdownInput() throws IOException
         {
-        throw new NotYetImplementedException ();
+        this.m_in.close();
         }
 
     /**
@@ -407,6 +417,6 @@ public final class IoSessionSocket extends Socket
     @Override
     public void shutdownOutput() throws IOException
         {
-        throw new NotYetImplementedException ();
+        this.m_out.close();
         }
     }
