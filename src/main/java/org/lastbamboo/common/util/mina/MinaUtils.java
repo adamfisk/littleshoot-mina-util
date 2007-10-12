@@ -9,6 +9,7 @@ import java.util.LinkedList;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.mina.common.ByteBuffer;
+import org.apache.mina.common.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -270,5 +271,17 @@ public class MinaUtils
             LOG.error("Bad encoding?", e);
             return ByteBuffer.allocate(0);
             }
+        }
+
+    /**
+     * Determines whether or not the specified session is a UDP session.
+     * 
+     * @param session The session to check.
+     * @return <code>true</code> if the session is a UDP session, otherwise
+     * <code>false</code>.
+     */
+    public static boolean isUdp(final IoSession session)
+        {
+        return session.getTransportType().isConnectionless();
         }
     }
