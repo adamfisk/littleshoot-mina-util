@@ -140,7 +140,16 @@ public class DemuxingProtocolCodecFactory implements ProtocolCodecFactory
                 if (this.m_currentDecoder == null || 
                     this.m_currentDecoder.atMessageBoundary())
                     {
-                    this.m_currentDecoder = selectDecoder(in);
+                    if (enoughData(in))
+                        {
+                        this.m_currentDecoder = selectDecoder(in);
+                        }
+                    else
+                        {
+                        // There's not enough data to determine which decoder 
+                        // to use, so wait until we get more.
+                        break;
+                        }
                     }
                 this.m_currentDecoder.decode(session, in, out);
                 }
@@ -178,6 +187,19 @@ public class DemuxingProtocolCodecFactory implements ProtocolCodecFactory
                 MinaUtils.toAsciiString(in));
             throw new IllegalArgumentException("Could not read data: " + 
                 MinaUtils.toAsciiString(in));
+            }
+        
+        private boolean enoughData(final ByteBuffer in)
+            {
+            for (final DemuxableProtocolCodecFactory decoderFactory : 
+                this.m_codecFactories)
+                {
+                if (!decoderFactory.enoughData(in))
+                    {
+                    return false;
+                    }
+                }
+            return true;
             }
 
         public void dispose(final IoSession session) throws Exception

@@ -45,5 +45,15 @@ public interface DemuxableProtocolCodecFactory<T>
      * otherwise <code>false</code>.
      */
     boolean canDecode(ByteBuffer in);
+
+    /**
+     * Returns whether or not the specified buffer has enough data to 
+     * determine whether or not this decoder can handle it.
+     * 
+     * @param in The incoming buffer of data.
+     * @return <code>true</code> if there's enough data available to determine
+     * whether or not this decoder can understand the data.
+     */
+    boolean enoughData(ByteBuffer in);
     
     }
