@@ -62,7 +62,7 @@ public class DemuxingIoHandler<T, Z> extends IoHandlerAdapter
     public void exceptionCaught(final IoSession session, final Throwable cause)
         throws Exception
         {
-        //m_log.debug("Caught exception", cause);
+        m_log.debug("Caught exception", cause);
         this.m_ioHandler1.exceptionCaught(session, cause);
         this.m_ioHandler2.exceptionCaught(session, cause);
         }
