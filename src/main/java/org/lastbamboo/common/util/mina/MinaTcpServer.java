@@ -82,7 +82,6 @@ public class MinaTcpServer implements MinaServer
         cfg.setReuseAddress(true);
         cfg.getSessionConfig().setReuseAddress(true);
         
-        
         m_acceptor.addListener(ioServiceListener);
 
         final DefaultIoFilterChainBuilder filterChainBuilder = 
@@ -94,6 +93,7 @@ public class MinaTcpServer implements MinaServer
         final ExecutorFilter executorFilter = new ExecutorFilter(executor);
         filterChainBuilder.addLast("threadPool", executorFilter);
         m_acceptor.setDefaultConfig(cfg);
+        m_log.debug("Started MINA TCP server.");
         }
 
     public void start(final int port)
