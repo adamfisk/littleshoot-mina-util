@@ -67,6 +67,8 @@ public class SocketIoHandlerTest
         final byte[] httpResponseBytes = new byte[1000];
         is.read(httpResponseBytes);
         final String httpResponse = new String(httpResponseBytes,"US-ASCII");
-        assertTrue(httpResponse.startsWith("HTTP/1.1 200 OK"));
+        assertTrue("Unexpected response: "+httpResponse, 
+              httpResponse.startsWith("HTTP/1.1 200 OK") ||
+              httpResponse.startsWith("HTTP/1.1 302 Found"));
         }
     }
