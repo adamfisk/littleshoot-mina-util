@@ -1,6 +1,5 @@
 package org.lastbamboo.common.util.mina;
 
-import java.net.DatagramPacket;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
@@ -8,6 +7,7 @@ import java.util.Arrays;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.lastbamboo.common.util.NetworkUtils;
 
 /**
  * Test for the behavior of datagrams.  Are multiple {@link ByteBuffer}s 
@@ -21,11 +21,13 @@ public class DatagramTest
         {
         final ByteBuffer receiveBuf = ByteBuffer.allocate(2000);
         final DatagramChannel serverChannel = DatagramChannel.open();
-        serverChannel.socket().bind(new InetSocketAddress(7777));
         
+        final InetSocketAddress reusedAddress = 
+        	new InetSocketAddress(NetworkUtils.getLocalHost(), 8378);
+        serverChannel.socket().bind(reusedAddress);
         
         final DatagramChannel clientChannel = DatagramChannel.open();
-        clientChannel.connect(new InetSocketAddress(7777));
+        clientChannel.connect(reusedAddress);
         
         final ByteBuffer message1 = createBuf(1);
         final ByteBuffer message2 = createBuf(2);
