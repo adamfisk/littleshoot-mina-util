@@ -409,6 +409,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public void shutdownInput() throws IOException
         {
+        m_log.debug("Closing input stream...");
         this.m_in.close();
         }
 
@@ -418,6 +419,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public void shutdownOutput() throws IOException
         {
+        m_log.debug("Closing output stream");
         this.m_out.close();
         }
     }
