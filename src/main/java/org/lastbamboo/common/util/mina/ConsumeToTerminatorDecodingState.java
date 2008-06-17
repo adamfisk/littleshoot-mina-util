@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 /**
  * Consumes until a fixed (ASCII) character is reached.  This also allows
  * several characters to act as terminators.  In this case, the first 
- * terminator that is read ends the reading, i.e. it doesn't like for 
- * multiple terminators stringed together.
+ * terminator that is read ends the reading, i.e. it doesn't look for 
+ * multiple terminators strung together.
  * 
  * The terminator is skipped.
  */
