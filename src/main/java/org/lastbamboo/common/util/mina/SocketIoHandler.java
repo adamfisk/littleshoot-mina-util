@@ -84,6 +84,7 @@ public class SocketIoHandler extends IoHandlerAdapter
     /**
      * Initializes streams and timeout settings.
      */
+    @Override
     public void sessionOpened(final IoSession session)
         {
         // Set timeouts
@@ -103,6 +104,7 @@ public class SocketIoHandler extends IoHandlerAdapter
     /**
      * Closes streams
      */
+    @Override
     public void sessionClosed(final IoSession session) throws Exception
         {
         m_log.debug("Closing streams!!!");
@@ -121,6 +123,7 @@ public class SocketIoHandler extends IoHandlerAdapter
     /**
      * Forwards read data to input stream.
      */
+    @Override
     public void messageReceived(final IoSession session, final Object buf)
         {
         final IoSessionInputStream in = 
@@ -132,8 +135,10 @@ public class SocketIoHandler extends IoHandlerAdapter
     /**
      * Forwards caught exceptions to input stream.
      */
+    @Override
     public void exceptionCaught(final IoSession session, final Throwable cause)
         {
+        m_log.warn("Exception caught!!!", cause);
         final IoSessionInputStream in = (IoSessionInputStream) session
                 .getAttribute(KEY_IN);
 
@@ -161,8 +166,10 @@ public class SocketIoHandler extends IoHandlerAdapter
     /**
      * Handles read timeout.
      */
+    @Override
     public void sessionIdle(final IoSession session, final IdleStatus status)
         {
+        m_log.debug("Session Idle!!!");
         if (status == IdleStatus.READER_IDLE)
             {
             throw new StreamIoException(new SocketTimeoutException(
