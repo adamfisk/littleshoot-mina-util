@@ -71,7 +71,7 @@ public class DemuxingIoHandler<T, Z> extends IoHandlerAdapter
     public void messageReceived(final IoSession session, final Object message)
         throws Exception
         {
-        m_log.debug("Received message: {}", message);
+        m_log.debug("Received message...");
         final IoHandler handler = getHandlerForMessage(message);
         if (handler != null)
             {
@@ -83,7 +83,7 @@ public class DemuxingIoHandler<T, Z> extends IoHandlerAdapter
     public void messageSent(final IoSession session, final Object message) 
         throws Exception
         {
-        m_log.debug("Sent message: {}", message);
+        m_log.debug("Sent message...");
         final IoHandler handler = getHandlerForMessage(message);
         if (handler != null)
             {

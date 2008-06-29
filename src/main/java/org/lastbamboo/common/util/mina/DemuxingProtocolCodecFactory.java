@@ -94,7 +94,7 @@ public class DemuxingProtocolCodecFactory implements ProtocolCodecFactory
         public void encode(final IoSession session, final Object message, 
             final ProtocolEncoderOutput out) throws Exception
             {
-            this.m_encoderLogger.debug("Encoding message: {}", message);
+            this.m_encoderLogger.debug("Encoding message...");
             final Class messageClass = message.getClass();
             synchronized (this.m_encoderFactories)
                 {
