@@ -96,19 +96,11 @@ public class MinaTcpServer implements MinaServer
         m_log.debug("Started MINA TCP server.");
         }
 
-    public void start(final int port)
+    public void start(final int port) throws IOException
         {
-        try
-            {
-            final InetSocketAddress address = 
-                new InetSocketAddress(NetworkUtils.getLocalHost(), port);
-
-            m_acceptor.bind(address, m_handler);
-            }
-        catch (final IOException e)
-            {
-            m_log.error("Could not bind!!", e);
-            }
+        final InetSocketAddress address = 
+            new InetSocketAddress(NetworkUtils.getLocalHost(), port);
+        m_acceptor.bind(address, m_handler);
         }
 
     public void stop()

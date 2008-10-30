@@ -1,5 +1,7 @@
 package org.lastbamboo.common.util.mina;
 
+import java.io.IOException;
+
 import org.apache.mina.common.IoServiceListener;
 
 /**
@@ -10,9 +12,11 @@ public interface MinaServer
 
     /**
      * Starts the MINA server.
-     * @param port The port to listen on.
+     * @param localPort The port to listen on.
+     * 
+     * @throws IOException If we cannot bind to the port.
      */
-    void start(int port);
+    void start(int localPort) throws IOException;
     
     /**
      * Stops the MINA server.
