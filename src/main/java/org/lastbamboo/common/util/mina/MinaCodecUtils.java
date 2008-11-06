@@ -58,7 +58,7 @@ public class MinaCodecUtils
     /**
      * Space character
      */
-    public static final byte SP = 32;
+    public static final byte SPACE = 32;
 
     /**
      * Plus character
@@ -197,7 +197,7 @@ public class MinaCodecUtils
      */
     public static boolean isWhiteSpace(byte b)
         {
-        return b == SP || b == HT;
+        return b == SPACE || b == HT;
         }
 
     /**
@@ -270,7 +270,7 @@ public class MinaCodecUtils
             byte b = (byte) string.charAt(i);
             if (isHttpControl(b) && b != HT)
                 {
-                b = SP;
+                b = SPACE;
                 }
             buffer.put(b);
             }

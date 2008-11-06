@@ -12,6 +12,6 @@ public abstract class SpaceSkippingState extends SkippingState
      */
     public SpaceSkippingState()
         {
-        super(MinaCodecUtils.SP);
+        super(MinaCodecUtils.SPACE);
         }
     }

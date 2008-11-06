@@ -18,6 +18,6 @@ public abstract class ConsumeToLinearWhitespaceDecodingState extends
      */
     public ConsumeToLinearWhitespaceDecodingState()
         {
-        super(MinaCodecUtils.SP);
+        super(MinaCodecUtils.SPACE);
         }
     }
