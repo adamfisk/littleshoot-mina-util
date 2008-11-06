@@ -43,8 +43,8 @@ public abstract class ConsumeToCrlfDecodingState implements DecodingState
     public DecodingState decode(final ByteBuffer in, 
         final ProtocolDecoderOutput out) throws Exception
         {
-        int beginPos = in.position();
-        int limit = in.limit();
+        final int beginPos = in.position();
+        final int limit = in.limit();
         int terminatorPos = -1;
 
         for (int i = beginPos; i < limit; i++)
