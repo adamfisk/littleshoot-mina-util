@@ -3,12 +3,10 @@ package org.lastbamboo.common.util.mina;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apache.mina.common.ByteBuffer;
 import org.apache.mina.common.DefaultIoFilterChainBuilder;
-import org.apache.mina.common.ExecutorThreadModel;
 import org.apache.mina.common.IoHandler;
 import org.apache.mina.common.IoServiceListener;
 import org.apache.mina.common.SimpleByteBufferAllocator;
@@ -18,6 +16,7 @@ import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.executor.ExecutorFilter;
 import org.apache.mina.transport.socket.nio.SocketAcceptor;
 import org.apache.mina.transport.socket.nio.SocketAcceptorConfig;
+import org.lastbamboo.common.util.DaemonThreadFactory;
 import org.lastbamboo.common.util.NetworkUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,20 +60,19 @@ public class MinaTcpServer implements MinaServer
         {
         if (ioServiceListener == null)
             {
+            m_log.error("No IO Service Listener");
             throw new NullPointerException("Null listener");
             }
         ByteBuffer.setUseDirectBuffers(false);
         ByteBuffer.setAllocator(new SimpleByteBufferAllocator());
         m_handler = handler;
-        final Executor threadPool = Executors.newCachedThreadPool();
-        m_acceptor = new SocketAcceptor(
-            Runtime.getRuntime().availableProcessors() + 1, threadPool);
+        final Executor executor = Executors.newCachedThreadPool(
+            new DaemonThreadFactory(baseThreadName+"-Mina-TCP-Server"));
+        m_acceptor = new SocketAcceptor(4, executor);
 
-        final SocketAcceptorConfig cfg = new SocketAcceptorConfig();
+        final SocketAcceptorConfig cfg = m_acceptor.getDefaultConfig();
         
-        final ThreadModel threadModel = 
-            ExecutorThreadModel.getInstance(baseThreadName);
-        cfg.setThreadModel(threadModel);
+        cfg.setThreadModel(ThreadModel.MANUAL);
 
         // Just hoping this method does what it sounds like it does.
         cfg.setDisconnectOnUnbind(true);
@@ -89,10 +87,7 @@ public class MinaTcpServer implements MinaServer
         final ProtocolCodecFilter codecFilter = 
             new ProtocolCodecFilter(codecFactory);
         filterChainBuilder.addLast("codec", codecFilter);
-        final ExecutorService executor = Executors.newCachedThreadPool();
-        final ExecutorFilter executorFilter = new ExecutorFilter(executor);
-        filterChainBuilder.addLast("threadPool", executorFilter);
-        m_acceptor.setDefaultConfig(cfg);
+        filterChainBuilder.addLast("threadPool", new ExecutorFilter(executor));
         m_log.debug("Started MINA TCP server.");
         }
 
