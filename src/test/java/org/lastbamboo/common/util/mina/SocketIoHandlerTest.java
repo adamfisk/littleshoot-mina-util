@@ -12,7 +12,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.littleshoot.mina.common.IoSession;
 import org.littleshoot.mina.transport.socket.nio.SocketConnector;
-import org.junit.Test;
 
 /**
  * Test for socket IO handling. 
@@ -20,7 +19,7 @@ import org.junit.Test;
 public class SocketIoHandlerTest
     {
 
-    @Test public void testSocket() throws Exception
+    public void testSocket() throws Exception
         {
         final AtomicReference<Socket> ref = new AtomicReference<Socket>();
         final SocketIoHandler handler = new SocketIoHandler()
