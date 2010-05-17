@@ -22,9 +22,9 @@ package org.lastbamboo.common.util.mina;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.mina.common.ByteBuffer;
-import org.apache.mina.common.IoHandler;
-import org.apache.mina.common.IoSession;
+import org.littleshoot.mina.common.ByteBuffer;
+import org.littleshoot.mina.common.IoHandler;
+import org.littleshoot.mina.common.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

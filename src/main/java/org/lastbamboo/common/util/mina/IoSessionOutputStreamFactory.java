@@ -2,7 +2,7 @@ package org.lastbamboo.common.util.mina;
 
 import java.io.OutputStream;
 
-import org.apache.mina.common.IoSession;
+import org.littleshoot.mina.common.IoSession;
 
 /**
  * Factory for creating new {@link OutputStream}s from {@link IoSession}. 

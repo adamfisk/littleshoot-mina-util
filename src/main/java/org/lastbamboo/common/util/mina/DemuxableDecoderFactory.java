@@ -1,6 +1,6 @@
 package org.lastbamboo.common.util.mina;
 
-import org.apache.mina.common.ByteBuffer;
+import org.littleshoot.mina.common.ByteBuffer;
 
 /**
  * Protocol decoder with additional methods making it capable of being 

@@ -2,7 +2,7 @@ package org.lastbamboo.common.util.mina;
 
 import java.io.IOException;
 
-import org.apache.mina.common.IoServiceListener;
+import org.littleshoot.mina.common.IoServiceListener;
 
 /**
  * Generic interface for MINA servers.

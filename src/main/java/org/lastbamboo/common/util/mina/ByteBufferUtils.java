@@ -5,8 +5,8 @@ import java.util.LinkedList;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.mina.common.ByteBuffer;
-import org.apache.mina.common.SimpleByteBufferAllocator;
+import org.littleshoot.mina.common.ByteBuffer;
+import org.littleshoot.mina.common.SimpleByteBufferAllocator;
 
 /**
  * Utility class for manipulating <code>ByteBuffer</code>s.

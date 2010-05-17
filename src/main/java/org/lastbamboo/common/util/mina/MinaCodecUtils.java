@@ -17,7 +17,7 @@ package org.lastbamboo.common.util.mina;
 
 import java.io.UnsupportedEncodingException;
 
-import org.apache.mina.common.ByteBuffer;
+import org.littleshoot.mina.common.ByteBuffer;
 
 /**
  * Taken from AsyncWeb.  Utilies for SIP codec handling.

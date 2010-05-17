@@ -15,8 +15,8 @@
  */
 package org.lastbamboo.common.util.mina;
 
-import org.apache.mina.common.ByteBuffer;
-import org.apache.mina.filter.codec.ProtocolDecoderOutput;
+import org.littleshoot.mina.common.ByteBuffer;
+import org.littleshoot.mina.filter.codec.ProtocolDecoderOutput;
 
 
 /**

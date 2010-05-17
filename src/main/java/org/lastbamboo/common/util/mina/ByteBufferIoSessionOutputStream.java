@@ -2,9 +2,9 @@ package org.lastbamboo.common.util.mina;
 
 import java.io.IOException;
 
-import org.apache.mina.common.ByteBuffer;
-import org.apache.mina.common.IoSession;
-import org.apache.mina.handler.support.IoSessionOutputStream;
+import org.littleshoot.mina.common.ByteBuffer;
+import org.littleshoot.mina.common.IoSession;
+import org.littleshoot.mina.handler.support.IoSessionOutputStream;
 
 /**
  * An {@link IoSessionOutputStream} for byte buffers.

@@ -10,8 +10,8 @@ import java.net.SocketAddress;
 import java.net.SocketException;
 import java.nio.channels.SocketChannel;
 
-import org.apache.mina.common.IoSession;
-import org.apache.mina.transport.socket.nio.SocketSessionConfig;
+import org.littleshoot.mina.common.IoSession;
+import org.littleshoot.mina.transport.socket.nio.SocketSessionConfig;
 import org.lastbamboo.common.util.NotYetImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

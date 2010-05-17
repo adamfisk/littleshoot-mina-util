@@ -1,6 +1,6 @@
 package org.lastbamboo.common.util.mina;
 
-import org.apache.mina.common.ByteBuffer;
+import org.littleshoot.mina.common.ByteBuffer;
 import org.lastbamboo.common.util.UByte;
 import org.lastbamboo.common.util.UByteImpl;
 import org.lastbamboo.common.util.UInt;

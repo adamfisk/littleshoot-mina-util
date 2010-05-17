@@ -8,8 +8,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.mina.common.ByteBuffer;
-import org.apache.mina.common.IoSession;
+import org.littleshoot.mina.common.ByteBuffer;
+import org.littleshoot.mina.common.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

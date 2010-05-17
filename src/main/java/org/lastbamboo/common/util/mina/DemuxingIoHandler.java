@@ -1,9 +1,9 @@
 package org.lastbamboo.common.util.mina;
 
-import org.apache.mina.common.IdleStatus;
-import org.apache.mina.common.IoHandler;
-import org.apache.mina.common.IoHandlerAdapter;
-import org.apache.mina.common.IoSession;
+import org.littleshoot.mina.common.IdleStatus;
+import org.littleshoot.mina.common.IoHandler;
+import org.littleshoot.mina.common.IoHandlerAdapter;
+import org.littleshoot.mina.common.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

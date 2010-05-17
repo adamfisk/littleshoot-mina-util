@@ -10,8 +10,8 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.apache.mina.common.IoSession;
-import org.apache.mina.transport.socket.nio.SocketConnector;
+import org.littleshoot.mina.common.IoSession;
+import org.littleshoot.mina.transport.socket.nio.SocketConnector;
 import org.junit.Test;
 
 /**

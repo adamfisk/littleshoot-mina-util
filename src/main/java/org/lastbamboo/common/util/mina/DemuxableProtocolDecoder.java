@@ -1,6 +1,6 @@
 package org.lastbamboo.common.util.mina;
 
-import org.apache.mina.filter.codec.ProtocolDecoder;
+import org.littleshoot.mina.filter.codec.ProtocolDecoder;
 
 /**
  * Protocol decoder with additional methods making it capable of being 
