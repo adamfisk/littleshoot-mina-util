@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.junit.Test;
 import org.littleshoot.mina.common.IoSession;
 import org.littleshoot.mina.transport.socket.nio.SocketConnector;
 
@@ -19,7 +20,7 @@ import org.littleshoot.mina.transport.socket.nio.SocketConnector;
 public class SocketIoHandlerTest
     {
 
-    public void testSocket() throws Exception
+    @Test public void testSocket() throws Exception
         {
         final AtomicReference<Socket> ref = new AtomicReference<Socket>();
         final SocketIoHandler handler = new SocketIoHandler()
@@ -37,6 +38,8 @@ public class SocketIoHandlerTest
             };
         
         final SocketConnector connector = new SocketConnector();
+        
+        // NOTE: This does not work outside the US because Google redirects us.
         final SocketAddress socketAddress = 
             new InetSocketAddress("www.google.com", 80);
         connector.connect(socketAddress, handler);
