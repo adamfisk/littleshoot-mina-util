@@ -3,8 +3,8 @@ package org.lastbamboo.common.util.mina;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.littleshoot.mina.common.ByteBuffer;
 import org.littleshoot.mina.common.SimpleByteBufferAllocator;
 
@@ -17,7 +17,7 @@ public final class ByteBufferUtils
     /**
      * Logger for this class.
      */
-    private static final Log LOG = LogFactory.getLog(ByteBufferUtils.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ByteBufferUtils.class);
 
     static
         {

@@ -6,8 +6,8 @@ import java.util.LinkedList;
 
 import junit.framework.TestCase;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.littleshoot.mina.common.ByteBuffer;
 import org.littleshoot.mina.common.SimpleByteBufferAllocator;
 import org.junit.Before;
@@ -19,7 +19,7 @@ import org.lastbamboo.common.util.mina.ByteBufferUtils;
 public final class ByteBufferUtilTest extends TestCase
     {
 
-    private static final Log LOG = LogFactory.getLog(ByteBufferUtilTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ByteBufferUtilTest.class);
     
     /**
      * MINA does some funky things if we don't do this first.
