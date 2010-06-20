@@ -3,6 +3,7 @@ package org.lastbamboo.common.util.mina;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.lastbamboo.common.util.ThreadUtils;
 import org.littleshoot.mina.common.ByteBuffer;
 import org.littleshoot.mina.common.IoSession;
 import org.littleshoot.mina.common.WriteFuture;
@@ -32,7 +33,7 @@ public abstract class AbstractIoSessionOutputStream<T> extends OutputStream
     @Override
     public void close() throws IOException 
         {
-        m_log.debug("Closing output stream...");
+        m_log.debug("Closing output stream from: "+ThreadUtils.dumpStack());
         try
             {
             flush();

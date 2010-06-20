@@ -13,6 +13,7 @@ import java.nio.channels.SocketChannel;
 import org.littleshoot.mina.common.IoSession;
 import org.littleshoot.mina.transport.socket.nio.SocketSessionConfig;
 import org.lastbamboo.common.util.NotYetImplementedException;
+import org.lastbamboo.common.util.ThreadUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,7 +65,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public void close() throws IOException
         {
-        m_log.debug("Closing socket!!!");
+        m_log.debug("Closing socket from: "+ThreadUtils.dumpStack());
         this.m_ioSession.close();
         }
 
@@ -409,7 +410,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public void shutdownInput() throws IOException
         {
-        m_log.debug("Closing input stream...");
+        m_log.debug("Closing input stream from: "+ThreadUtils.dumpStack());
         this.m_in.close();
         }
 
@@ -419,7 +420,7 @@ public final class IoSessionSocket extends Socket
     @Override
     public void shutdownOutput() throws IOException
         {
-        m_log.debug("Closing output stream");
+        m_log.debug("Closing output stream from: "+ThreadUtils.dumpStack());
         this.m_out.close();
         }
     }
