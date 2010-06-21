@@ -1,5 +1,6 @@
 package org.lastbamboo.common.util.mina;
 
+import org.lastbamboo.common.util.ThreadUtils;
 import org.littleshoot.mina.common.IdleStatus;
 import org.littleshoot.mina.common.IoHandler;
 import org.littleshoot.mina.common.IoHandlerAdapter;
@@ -63,6 +64,7 @@ public class DemuxingIoHandler<T, Z> extends IoHandlerAdapter
         throws Exception
         {
         m_log.debug("Caught exception", cause);
+        m_log.debug("Cause trace: "+ThreadUtils.dumpStack(cause.getCause()));
         this.m_ioHandler1.exceptionCaught(session, cause);
         this.m_ioHandler2.exceptionCaught(session, cause);
         }
