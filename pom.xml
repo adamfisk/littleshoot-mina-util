@@ -12,6 +12,10 @@
         <url>http://www.littleshoot.org</url>
     </organization>
 
+    <properties>
+         <slf4j.version>1.6.1</slf4j.version>
+    </properties>
+
     <licenses>
         <license>
             <name>GNU General Public License Version 2</name> 
@@ -49,9 +53,9 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.littleshoot.mina</groupId>
-            <artifactId>mina-core</artifactId>
-            <version>1.1.7</version>
+            <groupId>org.littleshoot</groupId>
+            <artifactId>mina-port</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -76,13 +80,13 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>1.6.1</version>
+            <version>${slf4j.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.6.1</version>
+            <version>${slf4j.version}</version>
         </dependency>
 
     </dependencies>
@@ -136,12 +140,5 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-
-        <repository>
-            <id>littleshoot</id>
-            <name>LittleShoot Repository</name>
-            <url>http://svn.littleshoot.org/maven</url>
-        </repository>
-
     </repositories>
 </project>

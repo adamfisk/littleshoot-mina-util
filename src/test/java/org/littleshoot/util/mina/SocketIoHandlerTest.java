@@ -1,4 +1,4 @@
-package org.lastbamboo.common.util.mina;
+package org.littleshoot.util.mina;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

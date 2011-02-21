@@ -1,4 +1,4 @@
-package org.lastbamboo.common.util.mina;
+package org.littleshoot.util.mina;
 
 /**
  * Factory for creating new {@link DecodingState}s. 

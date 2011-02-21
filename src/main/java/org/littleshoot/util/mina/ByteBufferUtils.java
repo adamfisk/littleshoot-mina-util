@@ -1,4 +1,4 @@
-package org.lastbamboo.common.util.mina;
+package org.littleshoot.util.mina;
 
 import java.util.Collection;
 import java.util.LinkedList;

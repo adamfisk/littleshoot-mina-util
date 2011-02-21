@@ -1,8 +1,8 @@
-package org.lastbamboo.common.util.mina.decode.binary;
+package org.littleshoot.util.mina.decode.binary;
 
 import org.littleshoot.mina.common.ByteBuffer;
 import org.littleshoot.mina.filter.codec.ProtocolDecoderOutput;
-import org.lastbamboo.common.util.mina.DecodingState;
+import org.littleshoot.util.mina.DecodingState;
 
 /**
  * Decoding state for reading a single unsigned short.

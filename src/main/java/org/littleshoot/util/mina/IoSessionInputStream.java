@@ -17,7 +17,7 @@
  *  under the License. 
  *  
  */
-package org.lastbamboo.common.util.mina;
+package org.littleshoot.util.mina;
 
 import java.io.IOException;
 import java.io.InputStream;
