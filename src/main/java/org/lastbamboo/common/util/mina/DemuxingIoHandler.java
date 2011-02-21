@@ -1,10 +1,10 @@
 package org.lastbamboo.common.util.mina;
 
-import org.lastbamboo.common.util.ThreadUtils;
 import org.littleshoot.mina.common.IdleStatus;
 import org.littleshoot.mina.common.IoHandler;
 import org.littleshoot.mina.common.IoHandlerAdapter;
 import org.littleshoot.mina.common.IoSession;
+import org.littleshoot.util.ThreadUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

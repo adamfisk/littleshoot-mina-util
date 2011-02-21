@@ -3,10 +3,10 @@ package org.lastbamboo.common.util.mina;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.lastbamboo.common.util.ThreadUtils;
 import org.littleshoot.mina.common.ByteBuffer;
 import org.littleshoot.mina.common.IoSession;
 import org.littleshoot.mina.common.WriteFuture;
+import org.littleshoot.util.ThreadUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

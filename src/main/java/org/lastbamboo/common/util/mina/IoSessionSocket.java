@@ -12,8 +12,8 @@ import java.nio.channels.SocketChannel;
 
 import org.littleshoot.mina.common.IoSession;
 import org.littleshoot.mina.transport.socket.nio.SocketSessionConfig;
-import org.lastbamboo.common.util.NotYetImplementedException;
-import org.lastbamboo.common.util.ThreadUtils;
+import org.littleshoot.util.NotYetImplementedException;
+import org.littleshoot.util.ThreadUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

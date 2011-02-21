@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.lastbamboo.common.util.NetworkUtils;
+import org.littleshoot.util.NetworkUtils;
 
 /**
  * Test for the behavior of datagrams.  Are multiple {@link ByteBuffer}s 

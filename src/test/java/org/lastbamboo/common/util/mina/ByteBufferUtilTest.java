@@ -6,12 +6,11 @@ import java.util.LinkedList;
 
 import junit.framework.TestCase;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.Before;
 import org.littleshoot.mina.common.ByteBuffer;
 import org.littleshoot.mina.common.SimpleByteBufferAllocator;
-import org.junit.Before;
-import org.lastbamboo.common.util.mina.ByteBufferUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Tests the utility class for manipulating <code>ByteBuffer</code>s.
