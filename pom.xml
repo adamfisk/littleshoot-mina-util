@@ -47,7 +47,7 @@
         <dependency>
             <groupId>org.littleshoot</groupId>
             <artifactId>util</artifactId>
-            <version>${ls.version}</version>
+            <version>1.0.3</version>
         </dependency> 
 
     </dependencies>
